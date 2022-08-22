@@ -1,1 +1,1 @@
-mod sensor;
+pub mod sensor;
