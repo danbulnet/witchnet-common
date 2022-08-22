@@ -1,0 +1,7 @@
+[package]
+name = "bionet-traits"
+version = "0.1.0"
+edition = "2021"
+authors = ["danbulnet <daniel@bulanda.net>"]
+
+[dependencies]
