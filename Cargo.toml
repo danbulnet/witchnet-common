@@ -1,5 +1,5 @@
 [package]
-name = "bionet-traits"
+name = "bionet-common"
 version = "0.1.0"
 edition = "2021"
 authors = ["danbulnet <daniel@bulanda.net>"]
