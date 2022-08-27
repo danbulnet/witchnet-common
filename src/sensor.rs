@@ -1,3 +1,8 @@
+use std::{
+    rc::Rc,
+    cell::RefCell
+};
+
 pub trait Sensor {
     type ElementType;
     type DataType;
@@ -6,11 +11,7 @@ pub trait Sensor {
     
     fn new(name: &str) -> Self;
     
-    fn insert<'graph, 'point>(
-        &'graph mut self, item: &'point Self::DataType
-    ) -> &'graph Self::ElementType;
+    fn insert(&mut self, item: &Self::DataType) -> Rc<RefCell<Self::ElementType>>;
     
-    fn search<'graph, 'point>(
-        &'graph self, item: &'point Self::DataType
-    ) -> Option<&'graph Self::ElementType>;
+    fn search(&self, item: &Self::DataType) -> Option<Rc<RefCell<Self::ElementType>>>;
 }
