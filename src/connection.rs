@@ -6,6 +6,10 @@ use std::{
 use crate::neuron::Neuron;
 
 pub trait Connection {
-    fn from<T>(&self) -> Rc<RefCell<T>> where T: Neuron;
-    fn to<T>(&self) -> Rc<RefCell<T>> where T: Neuron;
+    type From: Neuron;
+    type To: Neuron;
+
+    fn from(&self) -> Rc<RefCell<Self::From>>;
+    
+    fn to(&self) -> Rc<RefCell<Self::To>>;
 }
