@@ -14,4 +14,12 @@ pub trait Sensor {
     fn insert(&mut self, item: &Self::DataType) -> Rc<RefCell<Self::ElementType>>;
     
     fn search(&self, item: &Self::DataType) -> Option<Rc<RefCell<Self::ElementType>>>;
+
+    fn stimulate(
+        &mut self, 
+        item: &Self::DataType, 
+        signal: f32, 
+        propagate_horizontal: bool, 
+        propagate_vertical: bool
+    ) -> Rc<RefCell<Self::ElementType>>;
 }
