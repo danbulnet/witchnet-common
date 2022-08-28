@@ -1,4 +1,5 @@
-struct NeuronID {
+#[allow(dead_code)]
+pub struct NeuronID {
     id: String,
     parent_id: String
 }
