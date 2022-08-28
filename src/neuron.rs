@@ -1,7 +1,7 @@
 #[allow(dead_code)]
 pub struct NeuronID {
-    id: String,
-    parent_id: String
+    pub id: String,
+    pub parent_id: String
 }
 
 pub trait Neuron {
