@@ -5,7 +5,7 @@ use std::{
 
 use crate::neuron::Neuron;
 
-pub enum ConnectionType {
+pub enum ConnectionKind {
     Definition,
     Explanation,
     Inhibition,
@@ -23,5 +23,5 @@ pub trait Connection {
 
     fn weight(&self) -> f32;
 
-    fn connection_type(&self) -> ConnectionType;
+    fn kind(&self) -> ConnectionKind;
 }
