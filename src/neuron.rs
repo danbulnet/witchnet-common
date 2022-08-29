@@ -1,7 +1,9 @@
+use std::rc::Rc;
+
 #[derive(Debug, Clone)]
 pub struct NeuronID {
-    pub id: String,
-    pub parent_id: String
+    pub id: Rc<str>,
+    pub parent_id: Rc<str>
 }
 
 pub trait Neuron {
