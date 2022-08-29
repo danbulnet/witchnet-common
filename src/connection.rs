@@ -13,11 +13,11 @@ pub struct ConnectionID {
 
 #[derive(Copy, Clone, Debug)]
 pub enum ConnectionKind {
-    Definition,
-    Explanation,
-    Inhibition,
-    Similarity,
-    Consequence,
+    Defining,
+    Explanatory,
+    Inhibitory,
+    Similar,
+    Sequential,
     Dummy
 }
 
