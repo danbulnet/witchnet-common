@@ -1,11 +1,11 @@
-#[allow(dead_code)]
+#[derive(Debug, Clone)]
 pub struct NeuronID {
     pub id: String,
     pub parent_id: String
 }
 
 pub trait Neuron {
-    fn neuron_id(&self) -> NeuronID;
+    fn id(&self) -> NeuronID;
 
     fn activation(&self) -> f32;
 

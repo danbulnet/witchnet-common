@@ -3,7 +3,13 @@ use std::{
     cell::RefCell
 };
 
-use crate::neuron::Neuron;
+use crate::neuron::{ Neuron, NeuronID };
+
+#[derive(Debug, Clone)]
+pub struct ConnectionID {
+    pub from: NeuronID,
+    pub to: NeuronID
+}
 
 #[derive(Copy, Clone, Debug)]
 pub enum ConnectionKind {
@@ -19,11 +25,13 @@ pub trait Connection {
     type From: Neuron;
     type To: Neuron;
 
+    fn id(&self) -> ConnectionID;
+
     fn from(&self) -> Rc<RefCell<Self::From>>;
     
     fn to(&self) -> Rc<RefCell<Self::To>>;
 
-    fn weight(&self) -> f32;
-
     fn kind(&self) -> ConnectionKind;
+    
+    fn weight(&self) -> f32;
 }
