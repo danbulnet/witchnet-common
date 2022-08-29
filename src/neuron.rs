@@ -30,5 +30,5 @@ pub trait Neuron {
 
     fn connect(
         &mut self, to: Rc<RefCell<dyn Neuron>>, kind: ConnectionKind
-    ) -> Rc<RefCell<dyn Connection<From = dyn Neuron, To = dyn Neuron>>>;
+    ) -> Result<Rc<RefCell<dyn Connection<From = dyn Neuron, To = dyn Neuron>>>, String>;
 }
