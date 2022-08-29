@@ -16,9 +16,8 @@ pub enum ConnectionKind {
     Defining,
     Explanatory,
     Inhibitory,
-    Similar,
-    Sequential,
-    Dummy
+    Similarity,
+    Sequential
 }
 
 pub trait Connection {
