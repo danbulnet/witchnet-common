@@ -3,7 +3,7 @@ use std::{
     cell::RefCell
 };
 
-use crate::connection::ConnectionKind;
+use crate::connection::{ Connection, ConnectionKind };
 
 #[derive(Debug, Clone)]
 pub struct NeuronID {
@@ -28,5 +28,7 @@ pub trait Neuron {
 
     fn deactivate(&mut self, propagate_horizontal: bool, propagate_vertical: bool);
 
-    fn connect(&mut self, to: Rc<RefCell<dyn Neuron>>, kind: ConnectionKind);
+    fn connect(
+        &mut self, to: Rc<RefCell<dyn Neuron>>, kind: ConnectionKind
+    ) -> Rc<RefCell<dyn Connection<From = dyn Neuron, To = dyn Neuron>>>;
 }
