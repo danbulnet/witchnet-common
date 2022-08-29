@@ -5,6 +5,14 @@ use std::{
 
 use crate::neuron::Neuron;
 
+pub enum ConnectionType {
+    Definition,
+    Explanation,
+    Inhibition,
+    Similarity,
+    Consequence
+}
+
 pub trait Connection {
     type From: Neuron;
     type To: Neuron;
@@ -14,4 +22,6 @@ pub trait Connection {
     fn to(&self) -> Rc<RefCell<Self::To>>;
 
     fn weight(&self) -> f32;
+
+    fn connection_type(&self) -> ConnectionType;
 }
