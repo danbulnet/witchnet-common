@@ -12,4 +12,6 @@ pub trait Connection {
     fn from(&self) -> Rc<RefCell<Self::From>>;
     
     fn to(&self) -> Rc<RefCell<Self::To>>;
+
+    fn weight(&self) -> f32;
 }
