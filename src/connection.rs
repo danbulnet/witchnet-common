@@ -5,6 +5,7 @@ use std::{
 
 use crate::neuron::Neuron;
 
+#[derive(Copy, Clone, Debug)]
 pub enum ConnectionKind {
     Definition,
     Explanation,
