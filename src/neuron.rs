@@ -5,11 +5,15 @@ pub struct NeuronID {
 }
 
 pub trait Neuron {
-    fn get_id(&self) -> NeuronID;
+    fn neuron_id(&self) -> NeuronID;
 
     fn activation(&self) -> f32;
 
     fn stimulate(
         &mut self, signal: f32, propagate_horizontal: bool, propagate_vertical: bool
     ) -> f32;
+
+    fn is_sensor(&self) -> bool;
+
+    fn counter(&self) -> usize;
 }
