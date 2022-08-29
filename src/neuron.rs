@@ -1,4 +1,7 @@
-use std::rc::Rc;
+use std::{
+    rc::Rc, 
+    cell::RefCell
+};
 
 #[derive(Debug, Clone)]
 pub struct NeuronID {
@@ -11,11 +14,15 @@ pub trait Neuron {
 
     fn activation(&self) -> f32;
 
-    fn stimulate(
-        &mut self, signal: f32, propagate_horizontal: bool, propagate_vertical: bool
-    ) -> f32;
-
     fn is_sensor(&self) -> bool;
 
     fn counter(&self) -> usize;
+
+    fn activate(
+        &mut self, signal: f32, propagate_horizontal: bool, propagate_vertical: bool
+    ) -> Vec<Rc<RefCell<dyn Neuron>>>;
+
+    fn explain(&mut self) -> Vec<Rc<RefCell<dyn Neuron>>>;
+
+    fn deactivate(&mut self, propagate_horizontal: bool, propagate_vertical: bool);
 }
