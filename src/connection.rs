@@ -10,7 +10,8 @@ pub enum ConnectionKind {
     Explanation,
     Inhibition,
     Similarity,
-    Consequence
+    Consequence,
+    Dummy
 }
 
 pub trait Connection {
