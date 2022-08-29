@@ -21,8 +21,8 @@ pub enum ConnectionKind {
 }
 
 pub trait Connection {
-    type From: Neuron;
-    type To: Neuron;
+    type From: Neuron + ?Sized;
+    type To: Neuron + ?Sized;
 
     fn id(&self) -> ConnectionID;
 
