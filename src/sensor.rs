@@ -16,7 +16,7 @@ pub trait Sensor {
 
     fn data_category(&self) -> DataCategory;
     
-    fn new(name: &str) -> Self;
+    fn new(name: &str, data_category: DataCategory) -> Self;
     
     fn insert(&mut self, item: &Self::DataType) -> Rc<RefCell<Self::ElementType>>;
     
