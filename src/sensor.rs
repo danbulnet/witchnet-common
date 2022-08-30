@@ -3,6 +3,8 @@ use std::{
     cell::RefCell
 };
 
+use crate::neuron::Neuron;
+
 pub trait Sensor {
     type ElementType;
     type DataType;
@@ -15,11 +17,13 @@ pub trait Sensor {
     
     fn search(&self, item: &Self::DataType) -> Option<Rc<RefCell<Self::ElementType>>>;
 
-    fn stimulate(
+    fn activate(
         &mut self, 
         item: &Self::DataType, 
         signal: f32, 
         propagate_horizontal: bool, 
         propagate_vertical: bool
-    ) -> Rc<RefCell<Self::ElementType>>;
+    ) -> Vec<Rc<RefCell<dyn Neuron>>>;
+
+    fn deactivate(&mut self, propagate_vertical: bool);
 }
