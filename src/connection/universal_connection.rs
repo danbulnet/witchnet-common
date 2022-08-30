@@ -8,14 +8,14 @@ use crate::{
     connection::{ Connection, ConnectionKind, ConnectionID }
 };
 
-pub struct UniversalConnection<From: Neuron, To: Neuron> {
+pub struct UniversalConnection<From: Neuron + ?Sized, To: Neuron + ?Sized> {
     from: Rc<RefCell<From>>,
     to: Rc<RefCell<To>>,
     kind: ConnectionKind,
     weight: f32
 }
 
-impl<From: Neuron, To: Neuron> UniversalConnection<From, To> {
+impl<From: Neuron + ?Sized, To: Neuron + ?Sized> UniversalConnection<From, To> {
     pub fn new(
         from: Rc<RefCell<From>>, to: Rc<RefCell<To>>, kind: ConnectionKind, weight: f32
     ) -> UniversalConnection<From, To> { 
@@ -23,7 +23,7 @@ impl<From: Neuron, To: Neuron> UniversalConnection<From, To> {
     }
 }
 
-impl<From: Neuron, To: Neuron> Connection for UniversalConnection<From, To> {
+impl<From: Neuron + ?Sized, To: Neuron + ?Sized> Connection for UniversalConnection<From, To> {
     type From = From;
     type To = To;
 

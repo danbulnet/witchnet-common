@@ -8,13 +8,13 @@ use crate::{
     connection::{ Connection, ConnectionKind, ConnectionID }
 };
 
-pub struct SimilarityConnection<From: Neuron, To: Neuron> {
+pub struct SimilarityConnection<From: Neuron + ?Sized, To: Neuron + ?Sized> {
     from: Rc<RefCell<From>>,
     to: Rc<RefCell<To>>,
     weight: f32
 }
 
-impl<From: Neuron, To: Neuron> SimilarityConnection<From, To> {
+impl<From: Neuron + ?Sized, To: Neuron + ?Sized> SimilarityConnection<From, To> {
     pub fn new(
         from: Rc<RefCell<From>>, to: Rc<RefCell<To>>, weight: f32
     ) -> SimilarityConnection<From, To> {
@@ -22,7 +22,7 @@ impl<From: Neuron, To: Neuron> SimilarityConnection<From, To> {
     }
 }
 
-impl<From: Neuron, To: Neuron> Connection for SimilarityConnection<From, To> {
+impl<From: Neuron + ?Sized, To: Neuron + ?Sized> Connection for SimilarityConnection<From, To> {
     type From = From;
     type To = To;
 

@@ -8,13 +8,13 @@ use crate::{
     connection::{ Connection, ConnectionKind, ConnectionID }
 };
 
-pub struct SequentialConnection<From: Neuron, To: Neuron> {
+pub struct SequentialConnection<From: Neuron + ?Sized, To: Neuron + ?Sized> {
     from: Rc<RefCell<From>>,
     to: Rc<RefCell<To>>,
     weight: f32
 }
 
-impl<From: Neuron, To: Neuron> SequentialConnection<From, To> {
+impl<From: Neuron + ?Sized, To: Neuron + ?Sized> SequentialConnection<From, To> {
     pub fn new(
         from: Rc<RefCell<From>>, to: Rc<RefCell<To>>, weight: f32
     ) -> SequentialConnection<From, To> {
@@ -22,7 +22,7 @@ impl<From: Neuron, To: Neuron> SequentialConnection<From, To> {
     }
 }
 
-impl<From: Neuron, To: Neuron> Connection for SequentialConnection<From, To> {
+impl<From: Neuron + ?Sized, To: Neuron + ?Sized> Connection for SequentialConnection<From, To> {
     type From = From;
     type To = To;
 

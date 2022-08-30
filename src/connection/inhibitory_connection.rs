@@ -8,13 +8,13 @@ use crate::{
     connection::{ Connection, ConnectionKind, ConnectionID }
 };
 
-pub struct InhibitoryConnection<From: Neuron, To: Neuron> {
+pub struct InhibitoryConnection<From: Neuron + ?Sized, To: Neuron + ?Sized> {
     from: Rc<RefCell<From>>,
     to: Rc<RefCell<To>>,
     weight: f32
 }
 
-impl<From: Neuron, To: Neuron> InhibitoryConnection<From, To> {
+impl<From: Neuron + ?Sized, To: Neuron + ?Sized> InhibitoryConnection<From, To> {
     pub fn new(
         from: Rc<RefCell<From>>, to: Rc<RefCell<To>>, weight: f32
     ) -> InhibitoryConnection<From, To> {
@@ -22,7 +22,7 @@ impl<From: Neuron, To: Neuron> InhibitoryConnection<From, To> {
     }
 }
 
-impl<From: Neuron, To: Neuron> Connection for InhibitoryConnection<From, To> {
+impl<From: Neuron + ?Sized, To: Neuron + ?Sized> Connection for InhibitoryConnection<From, To> {
     type From = From;
     type To = To;
 

@@ -8,18 +8,18 @@ use crate::{
     connection::{ Connection, ConnectionKind, ConnectionID }
 };
 
-pub struct DefiningConnection<From: Neuron, To: Neuron> {
+pub struct DefiningConnection<From: Neuron + ?Sized, To: Neuron + ?Sized> {
     from: Rc<RefCell<From>>,
     to: Rc<RefCell<To>>
 }
 
-impl<From: Neuron, To: Neuron> DefiningConnection<From, To> {
+impl<From: Neuron + ?Sized, To: Neuron + ?Sized> DefiningConnection<From, To> {
     pub fn new(from: Rc<RefCell<From>>, to: Rc<RefCell<To>>) -> DefiningConnection<From, To> {
         DefiningConnection { from, to }
     }
 }
 
-impl<From: Neuron, To: Neuron> Connection for DefiningConnection<From, To> {
+impl<From: Neuron + ?Sized, To: Neuron + ?Sized> Connection for DefiningConnection<From, To> {
     type From = From;
     type To = To;
 
