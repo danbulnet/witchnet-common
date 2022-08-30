@@ -1,3 +1,9 @@
+pub mod universal_connection;
+pub mod defining_connection;
+pub mod similarity_connection;
+pub mod inhibitory_connection;
+pub mod sequential_connection;  
+
 use std::{
     rc::Rc,
     cell::RefCell
@@ -14,9 +20,8 @@ pub struct ConnectionID {
 #[derive(Copy, Clone, Debug)]
 pub enum ConnectionKind {
     Defining,
-    Explanatory,
-    Inhibitory,
     Similarity,
+    Inhibitory,
     Sequential
 }
 
