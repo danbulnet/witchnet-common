@@ -27,8 +27,10 @@ pub trait Neuron {
     fn explain(&mut self) -> Vec<Rc<RefCell<dyn Neuron>>>;
 
     fn deactivate(&mut self, propagate_horizontal: bool, propagate_vertical: bool);
+}
 
+pub trait NeuronConnect {
     fn connect(
         &mut self, to: Rc<RefCell<dyn Neuron>>, kind: ConnectionKind
-    ) -> Result<Rc<RefCell<dyn Connection<From = dyn Neuron, To = dyn Neuron>>>, String>;
+    ) -> Result<Rc<RefCell<dyn Connection<From = Self, To = dyn Neuron>>>, String>;
 }
