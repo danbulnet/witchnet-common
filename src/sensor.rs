@@ -32,7 +32,7 @@ pub trait Sensor {
     
     fn deactivate(
         &mut self, item: &Self::DataType, propagate_horizontal: bool, propagate_vertical: bool
-    );
+    ) -> Result<(), String>;
 
     fn deactivate_sensor(&mut self);
 }
