@@ -3,13 +3,18 @@ use std::{
     cell::RefCell
 };
 
-use crate::neuron::Neuron;
+use crate::{
+    neuron::Neuron,
+    data::DataCategory
+};
 
 pub trait Sensor {
     type ElementType;
     type DataType;
 
     fn name(&self) -> &str;
+
+    fn data_category(&self) -> DataCategory;
     
     fn new(name: &str) -> Self;
     
