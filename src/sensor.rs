@@ -28,7 +28,7 @@ pub trait Sensor {
         signal: f32, 
         propagate_horizontal: bool, 
         propagate_vertical: bool
-    ) -> Vec<Rc<RefCell<dyn Neuron>>>;
+    ) -> Result<Vec<Rc<RefCell<dyn Neuron>>>, String>;
     
     fn deactivate(
         &mut self, item: &Self::DataType, propagate_horizontal: bool, propagate_vertical: bool
