@@ -1,11 +1,11 @@
 use std::{
     rc::Rc,
     cell::RefCell,
-    collections::HashSet
+    collections::HashMap
 };
 
 use crate::{
-    neuron::Neuron,
+    neuron::{ Neuron, NeuronID },
     data::DataCategory
 };
 
@@ -29,7 +29,7 @@ pub trait Sensor {
         signal: f32, 
         propagate_horizontal: bool, 
         propagate_vertical: bool
-    ) -> Result<HashSet<Rc<RefCell<dyn Neuron>>>, String>;
+    ) -> Result<HashMap<&NeuronID, Rc<RefCell<dyn Neuron>>>, String>;
     
     fn deactivate(
         &mut self, item: &Self::DataType, propagate_horizontal: bool, propagate_vertical: bool
