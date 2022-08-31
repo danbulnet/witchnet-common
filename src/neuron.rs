@@ -24,9 +24,9 @@ pub trait Neuron {
 
     fn activate(
         &mut self, signal: f32, propagate_horizontal: bool, propagate_vertical: bool
-    ) -> HashMap<&NeuronID, Rc<RefCell<dyn Neuron>>>;
+    ) -> HashMap<NeuronID, Rc<RefCell<dyn Neuron>>>;
 
-    fn explain(&mut self) -> HashMap<&NeuronID, Rc<RefCell<dyn Neuron>>>;
+    fn explain(&mut self) -> HashMap<NeuronID, Rc<RefCell<dyn Neuron>>>;
 
     fn deactivate(&mut self, propagate_horizontal: bool, propagate_vertical: bool);
 }
