@@ -11,7 +11,7 @@ use std::{
 
 use crate::neuron::{ Neuron, NeuronID };
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct ConnectionID {
     pub from: NeuronID,
     pub to: NeuronID
