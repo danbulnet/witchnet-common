@@ -1,4 +1,4 @@
-#[derive(Copy, Clone, Debug)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DataCategory {
     Numerical,
     Categorical,
