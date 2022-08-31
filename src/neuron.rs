@@ -31,16 +31,16 @@ pub trait Neuron {
     fn deactivate(&mut self, propagate_horizontal: bool, propagate_vertical: bool);
 }
 
-pub trait NeuronConnectTo {
+pub trait NeuronConnect {
     fn connect_to(
         &mut self, to: Rc<RefCell<dyn Neuron>>, kind: ConnectionKind
     ) -> Result<Rc<RefCell<dyn Connection<From = Self, To = dyn Neuron>>>, String>;
-}
 
-pub trait NeuronConnectFrom {
     fn connect_from(
         &mut self, from: Rc<RefCell<dyn Neuron>>, kind: ConnectionKind
     ) -> Result<Rc<RefCell<dyn Connection<From = dyn Neuron, To = Self>>>, String>;
-}
 
-pub trait NeuronConnect: NeuronConnectFrom + NeuronConnectTo {}
+    fn connect_both(
+        &mut self, to: Rc<RefCell<dyn Neuron>>, kind: ConnectionKind
+    ) -> Result<Rc<RefCell<dyn Connection<From = Self, To = dyn Neuron>>>, String>;
+}
