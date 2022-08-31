@@ -1,6 +1,7 @@
 use std::{
     rc::Rc,
-    cell::RefCell
+    cell::RefCell,
+    collections::HashSet
 };
 
 use crate::{
@@ -28,7 +29,7 @@ pub trait Sensor {
         signal: f32, 
         propagate_horizontal: bool, 
         propagate_vertical: bool
-    ) -> Result<Vec<Rc<RefCell<dyn Neuron>>>, String>;
+    ) -> Result<HashSet<Rc<RefCell<dyn Neuron>>>, String>;
     
     fn deactivate(
         &mut self, item: &Self::DataType, propagate_horizontal: bool, propagate_vertical: bool

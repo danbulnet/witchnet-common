@@ -1,6 +1,8 @@
 use std::{
     rc::Rc, 
-    cell::RefCell
+    cell::RefCell,
+    hash::{ Hash, Hasher },
+    collections::HashSet
 };
 
 use crate::connection::{ Connection, ConnectionKind };
@@ -22,9 +24,9 @@ pub trait Neuron {
 
     fn activate(
         &mut self, signal: f32, propagate_horizontal: bool, propagate_vertical: bool
-    ) -> Vec<Rc<RefCell<dyn Neuron>>>;
+    ) -> HashSet<Rc<RefCell<dyn Neuron>>>;
 
-    fn explain(&mut self) -> Vec<Rc<RefCell<dyn Neuron>>>;
+    fn explain(&mut self) -> HashSet<Rc<RefCell<dyn Neuron>>>;
 
     fn deactivate(&mut self, propagate_horizontal: bool, propagate_vertical: bool);
 }
@@ -33,4 +35,18 @@ pub trait NeuronConnect {
     fn connect(
         &mut self, to: Rc<RefCell<dyn Neuron>>, kind: ConnectionKind
     ) -> Result<Rc<RefCell<dyn Connection<From = Self, To = dyn Neuron>>>, String>;
+}
+
+struct RcRefCellNeuronHash(Rc<RefCell<dyn Neuron>>);
+
+impl PartialEq for RcRefCellNeuronHash {
+    fn eq(&self, other: &RcRefCellNeuronHash) -> bool { Rc::ptr_eq(&self.0, &other.0) }
+}
+
+impl Eq for RcRefCellNeuronHash {}
+
+impl Hash for RcRefCellNeuronHash {
+    fn hash<H>(&self, hasher: &mut H) where H: Hasher { 
+        hasher.write_usize(Rc::as_ptr(&self.0) as *const () as usize);
+    }
 }
