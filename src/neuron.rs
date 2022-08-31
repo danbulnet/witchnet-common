@@ -32,7 +32,9 @@ pub trait Neuron {
 }
 
 pub trait NeuronConnect {
+    type NeuronType: Neuron + NeuronConnect;
+
     fn connect(
-        &mut self, to: Rc<RefCell<dyn Neuron>>, kind: ConnectionKind
-    ) -> Result<Rc<RefCell<dyn Connection<From = Self, To = dyn Neuron>>>, String>;
+        &mut self, to: Rc<RefCell<Self::NeuronType>>, kind: ConnectionKind
+    ) -> Result<Rc<RefCell<dyn Connection<From = Self, To = Self::NeuronType>>>, String>;
 }
