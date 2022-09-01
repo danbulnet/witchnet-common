@@ -50,6 +50,6 @@ pub trait NeuronConnect {
 }
 
 pub trait NeuronConnectBilateral<To: Neuron + NeuronConnect>: Neuron + NeuronConnect {
-    fn connect_bilateral(&mut self, to: Rc<RefCell<To>>) 
+    fn connect_bilateral(&mut self, to: Rc<RefCell<To>>, kind: ConnectionKind) 
     -> Result<Rc<RefCell<dyn Connection<From = dyn Neuron, To = dyn Neuron>>>, String>;
 }
