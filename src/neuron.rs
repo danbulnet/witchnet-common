@@ -37,7 +37,7 @@ pub trait NeuronConnect {
     ) -> Result<Rc<RefCell<dyn Connection<From = dyn Neuron, To = dyn Neuron>>>, String>;
 
     fn connect_to_connection(
-        &mut self, to_connection: Rc<RefCell<dyn Connection<From = Self, To = dyn Neuron>>>
+        &mut self, to_connection: Rc<RefCell<dyn Connection<From = dyn Neuron, To = dyn Neuron>>>
     ) -> Result<Rc<RefCell<dyn Connection<From = dyn Neuron, To = dyn Neuron>>>, String>;
 
     fn connect_from(
@@ -45,6 +45,6 @@ pub trait NeuronConnect {
     ) -> Result<Rc<RefCell<dyn Connection<From = dyn Neuron, To = dyn Neuron>>>, String>;
 
     fn connect_from_connection(
-        &mut self, from_connection: Rc<RefCell<dyn Connection<From = dyn Neuron, To = Self>>>
+        &mut self, from_connection: Rc<RefCell<dyn Connection<From = dyn Neuron, To = dyn Neuron>>>
     ) -> Result<Rc<RefCell<dyn Connection<From = dyn Neuron, To = dyn Neuron>>>, String>;
 }
