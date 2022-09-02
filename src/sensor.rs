@@ -5,6 +5,8 @@ use std::{
     fmt::Display
 };
 
+use num_traits::ToPrimitive;
+
 use crate::{
     neuron::{ Neuron, NeuronID },
     data::DataCategory,
@@ -12,6 +14,8 @@ use crate::{
 };
 
 pub trait SensorData: Clone + Display + PartialOrd + PartialEq + Distance {}
+
+impl<T> SensorData for T where T: Clone + Display + PartialOrd + PartialEq + Distance {}
 
 pub trait Sensor where  {
     type Data: SensorData;
