@@ -8,14 +8,18 @@ use crate::{
     neuron::{ Neuron, NeuronID },
     data::DataCategory
 };
+
+pub trait SensorDataType {}
+impl<T> SensorDataType for T {}
+
 pub trait Sensor {
     fn name(&self) -> &str;
 
     fn data_category(&self) -> DataCategory;
     
-    fn insert(&mut self, item: &dyn SensorDataType) -> Rc<RefCell<dyn SensorElement>>;
+    fn insert(&mut self, item: &dyn SensorDataType) -> Rc<RefCell<dyn Neuron>>;
     
-    fn search(&self, item: &dyn SensorDataType) -> Option<Rc<RefCell<dyn SensorElement>>>;
+    fn search(&self, item: &dyn SensorDataType) -> Option<Rc<RefCell<dyn Neuron>>>;
 
     fn activate(
         &mut self, 
@@ -31,9 +35,3 @@ pub trait Sensor {
 
     fn deactivate_sensor(&mut self);
 }
-
-pub trait SensorElement {}
-
-pub trait SensorDataType {}
-
-impl<T> SensorDataType for T {}
