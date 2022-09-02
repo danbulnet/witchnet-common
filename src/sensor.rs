@@ -8,11 +8,6 @@ use crate::{
     neuron::{ Neuron, NeuronID },
     data::DataCategory
 };
-
-pub trait SensorElement {}
-
-pub trait SensorDataType {}
-
 pub trait Sensor {
     fn name(&self) -> &str;
 
@@ -36,3 +31,9 @@ pub trait Sensor {
 
     fn deactivate_sensor(&mut self);
 }
+
+pub trait SensorElement {}
+
+pub trait SensorDataType {}
+
+impl<T> SensorDataType for T {}
