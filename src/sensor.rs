@@ -2,36 +2,33 @@ use std::{
     rc::Rc,
     cell::RefCell,
     collections::HashMap,
-    fmt::Display
+    any::Any
 };
 
 use crate::{
     neuron::{ Neuron, NeuronID },
-    data::DataCategory,
-    distances::Distance
+    data::DataCategory
 };
 
 pub trait Sensor where  {
-    type DataType: Clone + Display + PartialOrd + PartialEq + Distance;
-
     fn name(&self) -> &str;
 
     fn data_category(&self) -> DataCategory;
     
-    fn insert(&mut self, item: &Self::DataType) -> Rc<RefCell<dyn Neuron>>;
+    fn insert(&mut self, item: &dyn Any) -> Rc<RefCell<dyn Neuron>>;
     
-    fn search(&self, item: &Self::DataType) -> Option<Rc<RefCell<dyn Neuron>>>;
+    fn search(&self, item: &dyn Any) -> Option<Rc<RefCell<dyn Neuron>>>;
 
     fn activate(
         &mut self, 
-        item: &Self::DataType, 
+        item: &dyn Any, 
         signal: f32, 
         propagate_horizontal: bool, 
         propagate_vertical: bool
     ) -> Result<HashMap<NeuronID, Rc<RefCell<dyn Neuron>>>, String>;
     
     fn deactivate(
-        &mut self, item: &Self::DataType, propagate_horizontal: bool, propagate_vertical: bool
+        &mut self, item: &dyn Any, propagate_horizontal: bool, propagate_vertical: bool
     ) -> Result<(), String>;
 
     fn deactivate_sensor(&mut self);
