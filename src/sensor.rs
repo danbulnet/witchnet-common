@@ -32,7 +32,7 @@ impl Distance for SensorDataType {
     }
 }
 
-impl SensorData for SensorDataType where {}
+impl<T> SensorData for T where T: Clone + Display + PartialOrd + PartialEq + Distance {}
 
 pub trait Sensor where  {
     type Data: SensorData;
