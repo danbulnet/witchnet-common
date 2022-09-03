@@ -24,13 +24,13 @@ impl_sensor_data_marker! {
     String, str
 }
 
-pub trait SensorData: Clone + Display + PartialOrd + PartialEq + Distance<dyn SensorDataMarker> {}
+pub trait SensorData: Clone + Display + PartialOrd + PartialEq + Distance {}
 
 impl<T> SensorData for T 
-where T: Clone + Display + PartialOrd + PartialEq + Distance<dyn SensorDataMarker> {}
+where T: Clone + Display + PartialOrd + PartialEq + Distance {}
 
 pub trait Sensor {
-    type Data: Distance<dyn SensorDataMarker>;
+    type Data: Distance;
 
     fn name(&self) -> &str;
 
