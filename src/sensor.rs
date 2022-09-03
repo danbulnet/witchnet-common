@@ -2,7 +2,7 @@ use std::{
     rc::Rc,
     cell::RefCell,
     collections::HashMap,
-    fmt::{ Display, Formatter, Result as FmtResult } 
+    fmt::Display 
 };
 
 use crate::{
@@ -13,40 +13,19 @@ use crate::{
 
 pub trait SensorData: Clone + Display + PartialOrd + PartialEq + Distance {}
 
-// impl<T> SensorData for T where T: Clone + Display + PartialOrd + PartialEq + Distance {}
-macro_rules! impl_sensor_data {
-    ( $($t:ty),* ) => { $( impl SensorData for $t {}) * }
+impl<T> SensorData for T where T: Clone + Display + PartialOrd + PartialEq + Distance {}
+
+pub trait SensorDataMarker {}
+
+macro_rules! impl_sensor_data_marker {
+    ( $($t:ty),* ) => { $( impl SensorDataMarker for $t {}) * }
 }
 
-impl_sensor_data! { 
+impl_sensor_data_marker! { 
     i8, i16, i32, i64, i128, isize,
     u8, u16, u32, u64, u128, usize,
     f32, f64
 }
-
-#[derive(Clone, PartialEq, PartialOrd)]
-pub enum SensorDataType {
-    I8(i8), I16(i16), I32(i32), I64(i64), I128(i128), ISize(isize),
-    U8(u8), U16(u16), U32(u32), U64(u64), U128(u128), USize(usize),
-    F32(f32), F64(f64)
-}
-
-impl Display for SensorDataType {
-    fn fmt(&self, f: &mut Formatter) -> FmtResult {
-        write!(f, "{}", &self)
-    }
-}
-
-impl Distance for SensorDataType {
-    fn distance(&self, v: &Self) -> f64  {
-        if *self == *v { 0.0 } else { 1.0 }
-    }
-}
-
-impl From<i32> for SensorDataType {
-    fn from(item: i32) -> Self { SensorDataType::I32(item) }
-}
-
 
 pub trait Sensor where  {
     type Data: SensorData;
