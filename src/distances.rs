@@ -1,7 +1,7 @@
 use num_traits::ToPrimitive;
 
-pub trait Distance {
-    fn distance(&self, v: &Self) -> f64;
+pub trait Distance<Rhs = Self> where Rhs: ?Sized {
+    fn distance(&self, v: &Rhs) -> f64;
 }
 
 impl Distance for str {
