@@ -13,6 +13,17 @@ use crate::{
 
 pub trait SensorData: Clone + Display + PartialOrd + PartialEq + Distance {}
 
+// impl<T> SensorData for T where T: Clone + Display + PartialOrd + PartialEq + Distance {}
+macro_rules! impl_sensor_data {
+    ( $($t:ty),* ) => { $( impl SensorData for $t {}) * }
+}
+
+impl_sensor_data! { 
+    i8, i16, i32, i64, i128, isize,
+    u8, u16, u32, u64, u128, usize,
+    f32, f64
+}
+
 #[derive(Clone, PartialEq, PartialOrd)]
 pub enum SensorDataType {
     I8(i8), I16(i16), I32(i32), I64(i64), I128(i128), ISize(isize),
@@ -31,8 +42,6 @@ impl Distance for SensorDataType {
         if *self == *v { 0.0 } else { 1.0 }
     }
 }
-
-impl<T> SensorData for T where T: Clone + Display + PartialOrd + PartialEq + Distance {}
 
 impl From<i32> for SensorDataType {
     fn from(item: i32) -> Self { SensorDataType::I32(item) }
