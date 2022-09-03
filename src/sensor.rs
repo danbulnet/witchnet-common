@@ -11,10 +11,6 @@ use crate::{
     distances::Distance
 };
 
-pub trait SensorData: Clone + Display + PartialOrd + PartialEq + Distance {}
-
-impl<T> SensorData for T where T: Clone + Display + PartialOrd + PartialEq + Distance {}
-
 pub trait SensorDataMarker {}
 
 macro_rules! impl_sensor_data_marker {
@@ -26,6 +22,11 @@ impl_sensor_data_marker! {
     u8, u16, u32, u64, u128, usize,
     f32, f64
 }
+
+pub trait SensorData: Clone + Display + PartialOrd + PartialEq + Distance<dyn SensorDataMarker> {}
+
+impl<T> SensorData for T 
+where T: Clone + Display + PartialOrd + PartialEq + Distance<dyn SensorDataMarker> {}
 
 pub trait Sensor {
     type Data: SensorData;
