@@ -34,6 +34,11 @@ impl Distance for SensorDataType {
 
 impl<T> SensorData for T where T: Clone + Display + PartialOrd + PartialEq + Distance {}
 
+impl From<i32> for SensorDataType {
+    fn from(item: i32) -> Self { SensorDataType::I32(item) }
+}
+
+
 pub trait Sensor where  {
     type Data: SensorData;
 
