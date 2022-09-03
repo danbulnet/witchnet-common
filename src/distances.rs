@@ -1,14 +1,14 @@
 use num_traits::ToPrimitive;
 
-pub trait Distance: Sized {
+pub trait Distance {
     fn distance(&self, v: &Self) -> f64;
 }
 
-// impl Distance for str {
-//     fn distance(&self, v: &str) -> f64  {
-//         if *self == *v { 0.0 } else { 1.0 }
-//     }
-// }
+impl Distance for str {
+    fn distance(&self, v: &str) -> f64  {
+        if *self == *v { 0.0 } else { 1.0 }
+    }
+}
 
 impl Distance for String {
     fn distance(&self, v: &String) -> f64  {
@@ -63,7 +63,7 @@ mod tests {
 
     #[test]
     fn distance_str() {
-        assert_eq!("a".to_string().distance(&"a".to_string()), 0.0);
-        assert_eq!("a".to_string().distance(&"b".to_string()), 1.0);
+        assert_eq!("a".distance("a"), 0.0);
+        assert_eq!("a".distance("b"), 1.0);
     }
 }
