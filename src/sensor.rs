@@ -100,8 +100,9 @@ pub trait SensorDataDynamicMarker: SensorDataDynamic + PartialEq + PartialOrd + 
 impl<T> SensorDataDynamicMarker for T 
 where T: SensorDataDynamic + PartialEq + PartialOrd + Clone + 'static {}
 
-pub trait SensorDynamicBuilder {
-    fn new<D: SensorDataDynamicMarker>(name: &str, data_category: DataCategory) -> Rc<RefCell<dyn SensorDynamic<Data = D>>>;
+pub trait SensorDynamicBuilder<Key: SensorDataDynamicMarker> {
+    fn new<D: SensorDataDynamicMarker>(name: &str, data_category: DataCategory)
+    -> Rc<RefCell<dyn SensorDynamic<Data = Key>>>;
 }
 
 pub trait SensorDynamic {
