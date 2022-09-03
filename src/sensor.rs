@@ -5,8 +5,6 @@ use std::{
     fmt::Display
 };
 
-use num_traits::ToPrimitive;
-
 use crate::{
     neuron::{ Neuron, NeuronID },
     data::DataCategory,
