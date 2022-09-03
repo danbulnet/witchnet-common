@@ -9,8 +9,7 @@ use std::{
 
 use crate::{
     neuron::{ Neuron, NeuronID },
-    data::DataCategory,
-    distances::Distance
+    data::DataCategory
 };
 
 pub trait SensorData: Display {
@@ -48,10 +47,10 @@ impl PartialOrd for dyn SensorData + '_ {
     }
 }
 
-pub trait SensorDataMarker: Clone + Display + PartialOrd + PartialEq + Distance {}
+pub trait SensorDataMarker: SensorData + PartialEq + PartialOrd + Clone {}
 
 impl<T> SensorDataMarker for T 
-where T: Clone + Display + PartialOrd + PartialEq + Distance {}
+where T: SensorData + PartialEq + PartialOrd + Clone {}
 
 pub trait Sensor {
     type Data: SensorData; 
