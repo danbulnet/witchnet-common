@@ -95,10 +95,10 @@ pub trait SensorDataFastMarker: Display + Distance + PartialEq + PartialOrd + Cl
 impl<T> SensorDataFastMarker for T 
 where T: Display + Distance + PartialEq + PartialOrd + Clone {}
 
-pub trait SensorDataDynamicMarker: SensorDataDynamic + PartialEq + PartialOrd + Clone {}
+pub trait SensorDataDynamicMarker: SensorDataDynamic {}
 
 impl<T> SensorDataDynamicMarker for T 
-where T: SensorDataDynamic + PartialEq + PartialOrd + Clone {}
+where T: SensorDataDynamic {}
 
 pub trait SensorDynamic {
     type Data: SensorDataDynamic; 
