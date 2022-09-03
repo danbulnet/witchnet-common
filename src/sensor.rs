@@ -27,7 +27,7 @@ impl_sensor_data_marker! {
     f32, f64
 }
 
-pub trait Sensor where  {
+pub trait Sensor {
     type Data: SensorData;
 
     fn name(&self) -> &str;
