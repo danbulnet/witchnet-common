@@ -30,7 +30,7 @@ impl<T> SensorData for T
 where T: Clone + Display + PartialOrd + PartialEq + Distance {}
 
 pub trait Sensor {
-    type Data: SensorData;
+    type Data: Distance<dyn SensorDataMarker>;
 
     fn name(&self) -> &str;
 
