@@ -100,6 +100,10 @@ pub trait SensorDataDynamicMarker: SensorDataDynamic {}
 impl<T> SensorDataDynamicMarker for T 
 where T: SensorDataDynamic {}
 
+pub trait SensorDynamicBuilder {
+    fn new(name: &str, data_category: DataCategory) -> Rc<RefCell<dyn SensorDynamic<Data = dyn SensorDataDynamic>>>;
+}
+
 pub trait SensorDynamic {
     type Data: SensorDataDynamic; 
 
