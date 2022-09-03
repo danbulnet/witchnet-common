@@ -1,53 +1,38 @@
-use std::any::Any;
-
 use num_traits::ToPrimitive;
 
-pub trait Distance where {
-    fn any(&self) -> &dyn Any;
-    fn distance(&self, v: &dyn Distance) -> f64;
+pub trait Distance {
+    fn distance(&self, v: &Self) -> f64;
 }
 
-impl<T: 'static + PartialEq> Distance for T {
-    fn any(&self) -> &dyn Any { self }
-
-    fn distance(&self, rhs: &dyn Distance) -> f64 {
-        if *self == *rhs.any().downcast_ref::<T>().unwrap() { 0.0 } else { 1.0 }
+impl Distance for str {
+    fn distance(&self, v: &str) -> f64  {
+        if *self == *v { 0.0 } else { 1.0 }
     }
 }
 
-// pub trait Distance {
-//     fn distance(&self, v: &Self) -> f64;
-// }
+impl Distance for String {
+    fn distance(&self, v: &String) -> f64  {
+        if *self == *v { 0.0 } else { 1.0 }
+    }
+}
 
-// impl Distance for str {
-//     fn distance(&self, v: &str) -> f64  {
-//         if *self == *v { 0.0 } else { 1.0 }
-//     }
-// }
+macro_rules! impl_distance {
+    ( $($t:ty),* ) => {
+        $( impl Distance for $t {
+            fn distance(&self, v:&Self) -> f64 {
+                unsafe { 
+                    (Self::to_f64(self).unwrap_unchecked() - Self::to_f64(v).unwrap_unchecked()).abs()
+                }
+            }
+        }) *
+    }
+}
 
-// impl Distance for String {
-//     fn distance(&self, v: &String) -> f64  {
-//         if *self == *v { 0.0 } else { 1.0 }
-//     }
-// }
-
-// macro_rules! impl_distance {
-//     ( $($t:ty),* ) => {
-//         $( impl Distance for $t {
-//             fn distance(&self, v:&Self) -> f64 {
-//                 unsafe { 
-//                     (Self::to_f64(self).unwrap_unchecked() - Self::to_f64(v).unwrap_unchecked()).abs()
-//                 }
-//             }
-//         }) *
-//     }
-// }
-
-// impl_distance! { 
-//     i8, i16, i32, i64, i128, isize,
-//     u8, u16, u32, u64, u128, usize,
-//     f32, f64
-// }
+impl_distance! { 
+    i8, i16, i32, i64, i128, isize,
+    u8, u16, u32, u64, u128, usize,
+    f32, f64
+}
 
 #[cfg(test)]
 mod tests {
@@ -78,7 +63,7 @@ mod tests {
 
     #[test]
     fn distance_str() {
-        assert_eq!("a".to_string().distance(&"a".to_string() as &dyn Distance), 0.0);
-        assert_eq!("a".to_string().distance(&"b".to_string() as &dyn Distance), 1.0);
+        assert_eq!("a".distance(&"a"), 0.0);
+        assert_eq!("a".distance(&"b"), 1.0);
     }
 }

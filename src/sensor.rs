@@ -2,9 +2,9 @@ use std::{
     rc::Rc,
     cell::RefCell,
     collections::HashMap,
-    fmt::Display ,
-    any::Any,
-    cmp::Ordering
+    fmt::Display,
+    cmp::Ordering,
+    any::Any
 };
 
 use crate::{
@@ -12,19 +12,6 @@ use crate::{
     data::DataCategory,
     distances::Distance
 };
-
-pub trait SensorDataMarker {}
-
-macro_rules! impl_sensor_data_marker {
-    ( $($t:ty),* ) => { $( impl SensorDataMarker for $t {}) * }
-}
-
-impl_sensor_data_marker! { 
-    i8, i16, i32, i64, i128, isize,
-    u8, u16, u32, u64, u128, usize,
-    f32, f64,
-    String, str
-}
 
 pub trait SensorData: Display {
     fn any(&self) -> &dyn Any;
@@ -61,33 +48,10 @@ impl PartialOrd for dyn SensorData + '_ {
     }
 }
 
-// pub trait DistanceX where {
-//     fn any(&self) -> &dyn Any;
-//     fn distance(&self, v: &dyn DistanceX) -> f64;
-//     fn equals(&self, rhs: &dyn DistanceX) -> bool;
-// }
+pub trait SensorDataMarker: Clone + Display + PartialOrd + PartialEq + Distance {}
 
-// impl<T: 'static + PartialEq> DistanceX for T {
-//     // Co-opting the compiler's inference was easier than figuring out the
-//     // direct incantation.
-//     fn any(&self) -> &dyn Any {
-//         self
-//     }
-
-//     // Note here that we're downcasting to T and not dyn FooTrait or Box<dyn FooTrait>
-//     fn distance(&self, rhs: &dyn DistanceX) -> f64 {
-//         if *self == *rhs.any().downcast_ref::<T>() { 0.0 } else { 1.0 }
-//     }
-
-//     fn equals(&self, rhs: &dyn DistanceX) -> bool {
-//         rhs.any().downcast_ref::<T>().map(|rhs| rhs == self).unwrap_or(false)
-//     }
-// }
-
-// pub trait SensorData: Clone + Display + PartialOrd + PartialEq + Distance {}
-
-// impl<T> SensorData for T 
-// where T: Clone + Display + PartialOrd + PartialEq + Distance {}
+impl<T> SensorDataMarker for T 
+where T: Clone + Display + PartialOrd + PartialEq + Distance {}
 
 pub trait Sensor {
     type Data: SensorData; 
