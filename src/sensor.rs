@@ -7,53 +7,127 @@ use std::{
     any::Any
 };
 
+use num_traits::ToPrimitive;
+
 use crate::{
     neuron::{ Neuron, NeuronID },
-    data::DataCategory
+    data::DataCategory,
+    distances::Distance
 };
 
-pub trait SensorData: Display {
+pub trait SensorDataDynamicBase {
     fn any(&self) -> &dyn Any;
-    fn distance(&self, v: &dyn SensorData) -> f64;
-    fn equals(&self, rhs: &dyn SensorData) -> bool;
-    fn partial_cmp(&self, rhs: &dyn SensorData) -> Option<Ordering>;
 }
 
-impl<T: Display + PartialOrd + PartialEq + 'static> SensorData for T {
+pub trait SensorDataDynamic: SensorDataDynamicBase + Display {
+    fn equals(&self, rhs: &dyn SensorDataDynamic) -> bool;
+    fn partial_compare(&self, rhs: &dyn SensorDataDynamic) -> Option<Ordering>;
+    fn distance(&self, v: &dyn SensorDataDynamic) -> f64;
+}
+
+impl<T: Display + PartialOrd + PartialEq + 'static> SensorDataDynamicBase for T {
     fn any(&self) -> &dyn Any { self }
+}
 
-    fn distance(&self, rhs: &dyn SensorData) -> f64 {
-        if *self == *rhs.any().downcast_ref::<T>().unwrap() { 0.0 } else { 1.0 }
-    }
+macro_rules! impl_distance_numeric {
+    ( $($t:ty),* ) => {
+        $( impl SensorDataDynamic for $t {
+            fn equals(&self, rhs: &dyn SensorDataDynamic) -> bool {
+                rhs.any().downcast_ref::<$t>().map(|rhs| rhs == self).unwrap_or(false)
+            }
+            
+            fn partial_compare(&self, rhs: &dyn SensorDataDynamic) -> Option<Ordering> {
+                self.partial_cmp(rhs.any().downcast_ref::<$t>().unwrap())
+            }
 
-    fn equals(&self, rhs: &dyn SensorData) -> bool {
-        rhs.any().downcast_ref::<T>().map(|rhs| rhs == self).unwrap_or(false)
-    }
-    
-    fn partial_cmp(&self, rhs: &dyn SensorData) -> Option<Ordering> {
-        self.partial_cmp(rhs.any().downcast_ref::<T>().unwrap())
+            fn distance(&self, rhs: &dyn SensorDataDynamic) -> f64 {
+                let rhs = *rhs.any().downcast_ref::<$t>().unwrap();
+                unsafe { 
+                    (Self::to_f64(self).unwrap_unchecked() - Self::to_f64(&rhs).unwrap_unchecked()).abs()
+                }
+            }
+        }) *
     }
 }
 
-impl Eq for dyn SensorData {}
+macro_rules! impl_distance_categoric {
+    ( $($t:ty),* ) => {
+        $( impl SensorDataDynamic for $t {
+            fn equals(&self, rhs: &dyn SensorDataDynamic) -> bool {
+                rhs.any().downcast_ref::<$t>().map(|rhs| rhs == self).unwrap_or(false)
+            }
+            
+            fn partial_compare(&self, rhs: &dyn SensorDataDynamic) -> Option<Ordering> {
+                self.partial_cmp(rhs.any().downcast_ref::<$t>().unwrap())
+            }
 
-impl PartialEq for dyn SensorData + '_ { 
+            fn distance(&self, rhs: &dyn SensorDataDynamic) -> f64 {
+                if *self == *rhs.any().downcast_ref::<$t>().unwrap() { 0.0 } else { 1.0 }
+            }
+        }) *
+    }
+}
+
+impl_distance_numeric! { 
+    i8, i16, i32, i64, i128, isize,
+    u8, u16, u32, u64, u128, usize,
+    f32, f64
+}
+
+impl_distance_categoric! {
+    String
+}
+
+impl Eq for dyn SensorDataDynamic {}
+
+impl PartialEq for dyn SensorDataDynamic + '_ { 
     fn eq(&self, rhs: &Self) -> bool { self.equals(rhs) }
  }
 
-impl PartialOrd for dyn SensorData + '_ {
+impl PartialOrd for dyn SensorDataDynamic + '_ {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> { 
-        self.partial_cmp(other) 
+        self.partial_compare(other) 
     }
 }
 
-pub trait SensorDataMarker: SensorData + PartialEq + PartialOrd + Clone {}
+pub trait SensorDataFastMarker: Display + Distance + PartialEq + PartialOrd + Clone {}
 
-impl<T> SensorDataMarker for T 
-where T: SensorData + PartialEq + PartialOrd + Clone {}
+impl<T> SensorDataFastMarker for T 
+where T: Display + Distance + PartialEq + PartialOrd + Clone {}
 
-pub trait Sensor {
-    type Data: SensorData; 
+pub trait SensorDataDynamicMarker: SensorDataDynamic + PartialEq + PartialOrd + Clone {}
+
+impl<T> SensorDataDynamicMarker for T 
+where T: SensorDataDynamic + PartialEq + PartialOrd + Clone {}
+
+pub trait SensorDynamic {
+    type Data: SensorDataDynamic; 
+
+    fn name(&self) -> &str;
+
+    fn data_category(&self) -> DataCategory;
+    
+    fn insert(&mut self, item: &Self::Data) -> Rc<RefCell<dyn Neuron>>;
+    
+    fn search(&self, item: &Self::Data) -> Option<Rc<RefCell<dyn Neuron>>>;
+
+    fn activate(
+        &mut self, 
+        item: &Self::Data, 
+        signal: f32, 
+        propagate_horizontal: bool, 
+        propagate_vertical: bool
+    ) -> Result<HashMap<NeuronID, Rc<RefCell<dyn Neuron>>>, String>;
+    
+    fn deactivate(
+        &mut self, item: &Self::Data, propagate_horizontal: bool, propagate_vertical: bool
+    ) -> Result<(), String>;
+
+    fn deactivate_sensor(&mut self);
+}
+
+pub trait SensorFast {
+    type Data: SensorDataFastMarker; 
 
     fn name(&self) -> &str;
 
