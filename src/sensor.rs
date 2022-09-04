@@ -17,22 +17,24 @@ use crate::{
     distances::Distance
 };
 
+// Dynamic
+
 pub trait SensorDataDynamicBase {
     fn any(&self) -> &dyn Any;
 }
 
-pub trait SensorDataDynamic: SensorDataDynamicBase + Display + DynClone {
+impl<T> SensorDataDynamicBase for T 
+where T: SensorDataDynamic + Display + PartialOrd + PartialEq + 'static {
+    fn any(&self) -> &dyn Any { self }
+}
+
+pub trait SensorDataDynamic: SensorDataDynamicBase + Display + DynClone + 'static {
     fn equals(&self, rhs: &dyn SensorDataDynamic) -> bool;
     fn partial_compare(&self, rhs: &dyn SensorDataDynamic) -> Option<Ordering>;
     fn distance(&self, v: &dyn SensorDataDynamic) -> f64;
 }
 
 dyn_clone::clone_trait_object!(SensorDataDynamic);
-
-impl<T> SensorDataDynamicBase for T 
-where T: SensorDataDynamic + Display + PartialOrd + PartialEq + 'static {
-    fn any(&self) -> &dyn Any { self }
-}
 
 macro_rules! impl_distance_numeric {
     ( $($t:ty),* ) => {
@@ -98,17 +100,8 @@ impl PartialOrd for dyn SensorDataDynamic + '_ {
     }
 }
 
-pub trait SensorDataFastMarker: Display + Distance + PartialEq + PartialOrd + Copy {}
 
-impl<T> SensorDataFastMarker for T 
-where T: Display + Distance + PartialEq + PartialOrd + Copy {}
-
-pub trait SensorDataDynamicMarker: SensorDataDynamic + 'static {}
-
-impl<T> SensorDataDynamicMarker for T 
-where T: SensorDataDynamic + 'static {}
-
-pub trait SensorDynamicBuilder<Key: SensorDataDynamicMarker> {
+pub trait SensorDynamicBuilder<Key: SensorDataDynamic> {
     fn new(name: &str, data_category: DataCategory) -> Rc<RefCell<dyn SensorDynamic<Data = Key>>>;
 }
 
@@ -138,8 +131,15 @@ pub trait SensorDynamic {
     fn deactivate_sensor(&mut self);
 }
 
+// Fast
+
+pub trait SensorDataFast: Display + Distance + PartialEq + PartialOrd + Copy {}
+
+impl<T> SensorDataFast for T 
+where T: Display + Distance + PartialEq + PartialOrd + Copy {}
+
 pub trait SensorFast {
-    type Data: SensorDataFastMarker; 
+    type Data: SensorDataFast; 
 
     fn name(&self) -> &str;
 
