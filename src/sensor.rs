@@ -9,6 +9,8 @@ use std::{
 
 use num_traits::ToPrimitive;
 
+use dyn_clone::DynClone;
+
 use crate::{
     neuron::{ Neuron, NeuronID },
     data::DataCategory,
@@ -20,13 +22,15 @@ pub trait SensorDataDynamicBase {
     // fn clone_box(&self) -> Box<dyn SensorDataDynamic>;
 }
 
-pub trait SensorDataDynamic: SensorDataDynamicBase + Display {
+pub trait SensorDataDynamic: SensorDataDynamicBase + Display + DynClone {
     fn equals(&self, rhs: &dyn SensorDataDynamic) -> bool;
     fn partial_compare(&self, rhs: &dyn SensorDataDynamic) -> Option<Ordering>;
     fn distance(&self, v: &dyn SensorDataDynamic) -> f64;
 }
 
-impl<T: SensorDataDynamic + Display + PartialOrd + PartialEq + Copy + 'static> SensorDataDynamicBase for T {
+dyn_clone::clone_trait_object!(SensorDataDynamic);
+
+impl<T: SensorDataDynamic + Display + PartialOrd + PartialEq + 'static> SensorDataDynamicBase for T {
     fn any(&self) -> &dyn Any { self }
 
     // fn clone_box(&self) -> Box<dyn SensorDataDynamic> { Box::new(self.clone()) }
@@ -77,9 +81,9 @@ impl_distance_numeric! {
     f32, f64
 }
 
-// impl_distance_categoric! {
-//     String
-// }
+impl_distance_categoric! {
+    String
+}
 
 impl Eq for dyn SensorDataDynamic {}
 
@@ -102,7 +106,9 @@ pub trait SensorDataFastMarker: Display + Distance + PartialEq + PartialOrd + Co
 impl<T> SensorDataFastMarker for T 
 where T: Display + Distance + PartialEq + PartialOrd + Copy {}
 
-pub trait SensorDataDynamicMarker: SensorDataDynamic + 'static {}
+pub trait SensorDataDynamicMarker: SensorDataDynamic + DynClone + 'static {}
+
+dyn_clone::clone_trait_object!(SensorDataDynamicMarker);
 
 impl<T> SensorDataDynamicMarker for T 
 where T: SensorDataDynamic + 'static {}
