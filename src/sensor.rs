@@ -25,9 +25,10 @@ pub trait SensorDataDynamic: SensorDataDynamicBase + Display {
     fn equals(&self, rhs: &dyn SensorDataDynamic) -> bool;
     fn partial_compare(&self, rhs: &dyn SensorDataDynamic) -> Option<Ordering>;
     fn distance(&self, v: &dyn SensorDataDynamic) -> f64;
+    fn clone_object(&self) -> Box<dyn SensorDataDynamic>;
 }
 
-impl<T: Display + PartialOrd + PartialEq + 'static> SensorDataDynamicBase for T {
+impl<T: Display + PartialOrd + PartialEq + Clone + 'static> SensorDataDynamicBase for T {
     fn any(&self) -> &dyn Any { self }
 }
 
@@ -48,6 +49,8 @@ macro_rules! impl_distance_numeric {
                     (Self::to_f64(self).unwrap_unchecked() - Self::to_f64(&rhs).unwrap_unchecked()).abs()
                 }
             }
+
+            fn clone_object(&self) -> Box<dyn SensorDataDynamic> { Box::new(self.clone()) }
         }) *
     }
 }
@@ -66,6 +69,8 @@ macro_rules! impl_distance_categoric {
             fn distance(&self, rhs: &dyn SensorDataDynamic) -> f64 {
                 if *self == *rhs.any().downcast_ref::<$t>().unwrap() { 0.0 } else { 1.0 }
             }
+
+            fn clone_object(&self) -> Box<dyn SensorDataDynamic> { Box::new(self.clone()) }
         }) *
     }
 }
