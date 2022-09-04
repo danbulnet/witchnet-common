@@ -88,20 +88,6 @@ impl_distance_categoric! {
     String
 }
 
-impl<T: SensorDataDynamic + Clone + Display + PartialOrd + PartialEq + 'static> SensorDataDynamic for Box<T> {
-    fn equals(&self, rhs: &dyn SensorDataDynamic) -> bool {
-        rhs.any().downcast_ref::<T>().map(|rhs| *rhs == **self).unwrap_or(false)
-    }
-    
-    fn partial_compare(&self, rhs: &dyn SensorDataDynamic) -> Option<Ordering> {
-        (**self).partial_cmp(rhs.any().downcast_ref::<T>().unwrap())
-    }
-
-    fn distance(&self, rhs: &dyn SensorDataDynamic) -> f64 {
-        if **self == *rhs.any().downcast_ref::<T>().unwrap() { 0.0 } else { 1.0 }
-    }
-}
-
 impl Eq for dyn SensorDataDynamic {}
 
 impl PartialEq for dyn SensorDataDynamic + '_ { 
@@ -113,7 +99,6 @@ impl PartialOrd for dyn SensorDataDynamic + '_ {
         self.partial_compare(other) 
     }
 }
-
 
 pub trait SensorDynamicBuilder<Key: SensorDataDynamic> {
     fn new(name: &str, data_category: DataCategory) -> Rc<RefCell<dyn SensorDynamic<Data = Key>>>;
