@@ -21,14 +21,13 @@ pub trait SensorDataDynamicBase {
     fn any(&self) -> &dyn Any;
 }
 
-#[clonable]
-pub trait SensorDataDynamic: SensorDataDynamicBase + Display + Clone {
+pub trait SensorDataDynamic: SensorDataDynamicBase + Display {
     fn equals(&self, rhs: &dyn SensorDataDynamic) -> bool;
     fn partial_compare(&self, rhs: &dyn SensorDataDynamic) -> Option<Ordering>;
     fn distance(&self, v: &dyn SensorDataDynamic) -> f64;
 }
 
-impl<T: Display + PartialOrd + PartialEq + Clone + 'static> SensorDataDynamicBase for T {
+impl<T: Display + PartialOrd + PartialEq + 'static> SensorDataDynamicBase for T {
     fn any(&self) -> &dyn Any { self }
 }
 
@@ -98,10 +97,11 @@ pub trait SensorDataFastMarker: Display + Distance + PartialEq + PartialOrd + Cl
 impl<T> SensorDataFastMarker for T 
 where T: Display + Distance + PartialEq + PartialOrd + Clone {}
 
-pub trait SensorDataDynamicMarker: SensorDataDynamic + PartialEq + PartialOrd + 'static {}
+#[clonable]
+pub trait SensorDataDynamicMarker: SensorDataDynamic + Clone + 'static {}
 
 impl<T> SensorDataDynamicMarker for T 
-where T: SensorDataDynamic + PartialEq + PartialOrd + 'static {}
+where T: SensorDataDynamic + Clone + 'static {}
 
 pub trait SensorDynamicBuilder<Key: SensorDataDynamicMarker> {
     fn new(name: &str, data_category: DataCategory) -> Rc<RefCell<dyn SensorDynamic<Data = Key>>>;
