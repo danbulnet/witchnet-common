@@ -5,6 +5,7 @@ edition = "2021"
 authors = ["danbulnet <daniel@bulanda.net>"]
 
 [dependencies]
+dyn-clone = "1.0.9"
 num-traits = "0.2.15"
 
 [dev-dependencies]

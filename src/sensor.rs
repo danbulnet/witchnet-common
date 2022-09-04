@@ -9,6 +9,8 @@ use std::{
 
 use num_traits::ToPrimitive;
 
+use dyn_clone::DynClone;
+
 use crate::{
     neuron::{ Neuron, NeuronID },
     data::DataCategory,
@@ -19,7 +21,7 @@ pub trait SensorDataDynamicBase {
     fn any(&self) -> &dyn Any;
 }
 
-pub trait SensorDataDynamic: SensorDataDynamicBase + Display {
+pub trait SensorDataDynamic: SensorDataDynamicBase + Display + DynClone {
     fn equals(&self, rhs: &dyn SensorDataDynamic) -> bool;
     fn partial_compare(&self, rhs: &dyn SensorDataDynamic) -> Option<Ordering>;
     fn distance(&self, v: &dyn SensorDataDynamic) -> f64;
