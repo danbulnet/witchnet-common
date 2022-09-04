@@ -19,21 +19,21 @@ use crate::{
 
 pub trait SensorDataDynamicBase {
     fn any(&self) -> &dyn Any;
-    fn clone_box(&self) -> Box<dyn SensorDataDynamic>;
+    // fn clone_box(&self) -> Box<dyn SensorDataDynamic>;
 }
 
-pub trait SensorDataDynamic: SensorDataDynamicBase + Display {
+pub trait SensorDataDynamic: SensorDataDynamicBase + Display + DynClone {
     fn equals(&self, rhs: &dyn SensorDataDynamic) -> bool;
     fn partial_compare(&self, rhs: &dyn SensorDataDynamic) -> Option<Ordering>;
     fn distance(&self, v: &dyn SensorDataDynamic) -> f64;
 }
 
-// dyn_clone::clone_trait_object!(SensorDataDynamic);
+dyn_clone::clone_trait_object!(SensorDataDynamic);
 
-impl<T: SensorDataDynamic + Display + PartialOrd + PartialEq + Clone + 'static> SensorDataDynamicBase for T {
+impl<T: SensorDataDynamic + Display + PartialOrd + PartialEq + 'static> SensorDataDynamicBase for T {
     fn any(&self) -> &dyn Any { self }
 
-    fn clone_box(&self) -> Box<dyn SensorDataDynamic> { Box::new(self.clone()) }
+    // fn clone_box(&self) -> Box<dyn SensorDataDynamic> { Box::new(self.clone()) }
 }
 
 macro_rules! impl_distance_numeric {
@@ -97,20 +97,18 @@ impl PartialOrd for dyn SensorDataDynamic + '_ {
     }
 }
 
-impl Clone for Box<dyn SensorDataDynamic> {
-    fn clone(&self) -> Box<dyn SensorDataDynamic> { self.clone_box() }
-}
+// impl Clone for Box<dyn SensorDataDynamic> {
+//     fn clone(&self) -> Box<dyn SensorDataDynamic> { self.clone_box() }
+// }
 
 pub trait SensorDataFastMarker: Display + Distance + PartialEq + PartialOrd + Copy {}
 
 impl<T> SensorDataFastMarker for T 
 where T: Display + Distance + PartialEq + PartialOrd + Copy {}
 
-pub trait SensorDataDynamicMarker: SensorDataDynamic  + 'static {}
+pub trait SensorDataDynamicMarker: SensorDataDynamic + DynClone + 'static {}
 
-// pub trait SensorDataDynamicMarker: SensorDataDynamic + DynClone + 'static {}
-
-// dyn_clone::clone_trait_object!(SensorDataDynamicMarker);
+dyn_clone::clone_trait_object!(SensorDataDynamicMarker);
 
 impl<T> SensorDataDynamicMarker for T 
 where T: SensorDataDynamic + 'static {}
