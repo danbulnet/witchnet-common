@@ -17,7 +17,7 @@ use crate::{
 
 pub trait SensorDataDynamicBase {
     fn any(&self) -> &dyn Any;
-    fn clone_box(&self) -> Box<dyn SensorDataDynamic>;
+    // fn clone_box(&self) -> Box<dyn SensorDataDynamic>;
 }
 
 pub trait SensorDataDynamic: SensorDataDynamicBase + Display {
@@ -26,10 +26,10 @@ pub trait SensorDataDynamic: SensorDataDynamicBase + Display {
     fn distance(&self, v: &dyn SensorDataDynamic) -> f64;
 }
 
-impl<T: SensorDataDynamic + Display + PartialOrd + PartialEq + Clone + 'static> SensorDataDynamicBase for T {
+impl<T: SensorDataDynamic + Display + PartialOrd + PartialEq + Copy + 'static> SensorDataDynamicBase for T {
     fn any(&self) -> &dyn Any { self }
 
-    fn clone_box(&self) -> Box<dyn SensorDataDynamic> { Box::new(self.clone()) }
+    // fn clone_box(&self) -> Box<dyn SensorDataDynamic> { Box::new(self.clone()) }
 }
 
 macro_rules! impl_distance_numeric {
@@ -77,9 +77,9 @@ impl_distance_numeric! {
     f32, f64
 }
 
-impl_distance_categoric! {
-    String
-}
+// impl_distance_categoric! {
+//     String
+// }
 
 impl Eq for dyn SensorDataDynamic {}
 
@@ -93,14 +93,14 @@ impl PartialOrd for dyn SensorDataDynamic + '_ {
     }
 }
 
-impl Clone for Box<dyn SensorDataDynamic> {
-    fn clone(&self) -> Box<dyn SensorDataDynamic> { self.clone_box() }
-}
+// impl Clone for Box<dyn SensorDataDynamic> {
+//     fn clone(&self) -> Box<dyn SensorDataDynamic> { self.clone_box() }
+// }
 
-pub trait SensorDataFastMarker: Display + Distance + PartialEq + PartialOrd + Clone {}
+pub trait SensorDataFastMarker: Display + Distance + PartialEq + PartialOrd + Copy {}
 
 impl<T> SensorDataFastMarker for T 
-where T: Display + Distance + PartialEq + PartialOrd + Clone {}
+where T: Display + Distance + PartialEq + PartialOrd + Copy {}
 
 pub trait SensorDataDynamicMarker: SensorDataDynamic + 'static {}
 
