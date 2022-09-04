@@ -2,7 +2,7 @@ use std::{
     rc::Rc,
     cell::RefCell,
     collections::HashMap,
-    fmt::Display,
+    fmt::Debug,
     cmp::Ordering,
     any::Any
 };
@@ -24,11 +24,11 @@ pub trait SensorDataDynamicBase {
 }
 
 impl<T> SensorDataDynamicBase for T 
-where T: SensorDataDynamic + Display + PartialOrd + PartialEq + 'static {
+where T: SensorDataDynamic + Debug + PartialOrd + PartialEq + 'static {
     fn any(&self) -> &dyn Any { self }
 }
 
-pub trait SensorDataDynamic: SensorDataDynamicBase + Display + DynClone + 'static {
+pub trait SensorDataDynamic: SensorDataDynamicBase + Debug + DynClone + 'static {
     fn equals(&self, rhs: &dyn SensorDataDynamic) -> bool;
     fn partial_compare(&self, rhs: &dyn SensorDataDynamic) -> Option<Ordering>;
     fn distance(&self, v: &dyn SensorDataDynamic) -> f64;
@@ -88,17 +88,17 @@ impl_distance_categoric! {
     String
 }
 
-impl<T: SensorDataDynamic + Clone + Display + PartialOrd + PartialEq + 'static> SensorDataDynamic for Box<T> {
+impl<T: SensorDataDynamic + Debug + PartialOrd + PartialEq + 'static> SensorDataDynamic for Rc<RefCell<T>> {
     fn equals(&self, rhs: &dyn SensorDataDynamic) -> bool {
-        rhs.any().downcast_ref::<T>().map(|rhs| *rhs == **self).unwrap_or(false)
+        rhs.any().downcast_ref::<T>().map(|rhs| *rhs == *self.borrow()).unwrap_or(false)
     }
     
     fn partial_compare(&self, rhs: &dyn SensorDataDynamic) -> Option<Ordering> {
-        (**self).partial_cmp(rhs.any().downcast_ref::<T>().unwrap())
+        (*self.borrow()).partial_cmp(rhs.any().downcast_ref::<T>().unwrap())
     }
 
     fn distance(&self, rhs: &dyn SensorDataDynamic) -> f64 {
-        if **self == *rhs.any().downcast_ref::<T>().unwrap() { 0.0 } else { 1.0 }
+        if *self.borrow() == *rhs.any().downcast_ref::<T>().unwrap() { 0.0 } else { 1.0 }
     }
 }
 
@@ -147,10 +147,10 @@ pub trait SensorDynamic {
 
 // Fast
 
-pub trait SensorDataFast: Display + Distance + PartialEq + PartialOrd + Copy {}
+pub trait SensorDataFast: Debug + Distance + PartialEq + PartialOrd + Copy {}
 
 impl<T> SensorDataFast for T 
-where T: Display + Distance + PartialEq + PartialOrd + Copy {}
+where T: Debug + Distance + PartialEq + PartialOrd + Copy {}
 
 pub trait SensorFast {
     type Data: SensorDataFast; 
