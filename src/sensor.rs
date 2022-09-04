@@ -26,7 +26,7 @@ pub trait SensorDataDynamic: SensorDataDynamicBase + Display {
     fn distance(&self, v: &dyn SensorDataDynamic) -> f64;
 }
 
-impl<T: SensorDataDynamic + Display + PartialOrd + PartialEq + Clone + ?Sized + 'static> SensorDataDynamicBase for T {
+impl<T: SensorDataDynamic + Display + PartialOrd + PartialEq + Clone + 'static> SensorDataDynamicBase for T {
     fn any(&self) -> &dyn Any { self }
 
     fn clone_box(&self) -> Box<dyn SensorDataDynamic> { Box::new(self.clone()) }
