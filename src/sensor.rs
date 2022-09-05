@@ -142,10 +142,10 @@ impl<T: SensorDataDynamic> SensorDynamicDowncast<T> for dyn SensorDynamic<Data =
         sensor: Rc<RefCell<dyn SensorDynamic<Data = dyn SensorDataDynamic>>>
     ) -> Rc<RefCell<dyn SensorDynamic<Data = T>>> {
         unsafe { 
-            mem::transmute_copy::<
+            mem::transmute::<
                 Rc<RefCell<dyn SensorDynamic<Data = dyn SensorDataDynamic>>>,
                 Rc<RefCell<dyn SensorDynamic<Data = T>>>, 
-            >(&sensor) 
+            >(sensor) 
         }
     }
 }
@@ -153,21 +153,14 @@ impl<T: SensorDataDynamic> SensorDynamicDowncast<T> for dyn SensorDynamic<Data =
 pub trait SensorStaticDowncast<T: SensorDynamic>  {
     fn sensor_static_downcast(
         sensor: Rc<RefCell<dyn SensorDynamic<Data = dyn SensorDataDynamic>>>
-    ) -> Rc<RefCell<T>>;
+    ) -> *mut T;
 }
 
 impl<T: SensorDynamic, D: SensorDataDynamic> 
 SensorStaticDowncast<T> for dyn SensorDynamic<Data = D> {
     fn sensor_static_downcast(
         sensor: Rc<RefCell<dyn SensorDynamic<Data = dyn SensorDataDynamic>>>
-    ) -> Rc<RefCell<T>> {
-        unsafe { 
-            mem::transmute_copy::<
-                Rc<RefCell<dyn SensorDynamic<Data = dyn SensorDataDynamic>>>,
-                Rc<RefCell<T>>, 
-            >(&sensor) 
-        }
-    }
+    ) -> *mut T { &*sensor.borrow() as *const _ as *mut T }
 }
 
 
