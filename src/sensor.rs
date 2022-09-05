@@ -108,7 +108,7 @@ pub trait SensorDynamicBuilder<Key: SensorDataDynamic> {
 pub trait SensorDynamic: Any {
     type Data: SensorDataDynamic;
 
-    fn name(&self) -> &str;
+    fn id(&self) -> &str;
 
     fn data_category(&self) -> DataCategory;
     
@@ -174,7 +174,7 @@ where T: Display + Distance + PartialEq + PartialOrd + Copy {}
 pub trait SensorFast {
     type Data: SensorDataFast; 
 
-    fn name(&self) -> &str;
+    fn id(&self) -> &str;
 
     fn data_category(&self) -> DataCategory;
     
