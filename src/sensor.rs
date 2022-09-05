@@ -107,13 +107,11 @@ pub trait SensorDynamicBuilder<Key: SensorDataDynamic> {
 pub trait SensorDynamic: Any {
     type Data: SensorDataDynamic;
 
-    fn cast_data<'a, 'b: 'a>(&'a self, item: &'b Self::Data) -> &'b dyn SensorDataDynamic;
-
     fn name(&self) -> &str;
 
     fn data_category(&self) -> DataCategory;
     
-    fn insert(&mut self, item: &Self::Data) -> Rc<RefCell<dyn Neuron>>;
+    fn insert(&mut self, item: &dyn SensorDataDynamic) -> Rc<RefCell<dyn Neuron>>;
     
     fn search(&self, item: &Self::Data) -> Option<Rc<RefCell<dyn Neuron>>>;
 
