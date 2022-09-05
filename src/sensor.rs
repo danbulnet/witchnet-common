@@ -107,7 +107,7 @@ pub trait SensorDynamicBuilder<Key: SensorDataDynamic> {
 pub trait SensorDynamic: Any {
     type Data: SensorDataDynamic;
 
-    fn cast_data(&self, item: &Self::Data) -> &dyn SensorDataDynamic;
+    fn cast_data<'a, 'b>(&'a self, item: &'b Self::Data) -> &'b dyn SensorDataDynamic;
 
     fn name(&self) -> &str;
 
