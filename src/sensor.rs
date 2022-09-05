@@ -132,13 +132,13 @@ pub trait SensorDynamic: Any {
 }
 
 pub trait SensorDynamicDowncast<T: SensorDataDynamic> {
-    fn downcast_sensor(
+    fn sensor_dynamic_downcast(
         sensor: Rc<RefCell<dyn SensorDynamic<Data = dyn SensorDataDynamic>>>
     ) -> Rc<RefCell<dyn SensorDynamic<Data = T>>>;
 }
 
 impl<T: SensorDataDynamic> SensorDynamicDowncast<T> for dyn SensorDynamic<Data = T> {
-    fn downcast_sensor(
+    fn sensor_dynamic_downcast(
         sensor: Rc<RefCell<dyn SensorDynamic<Data = dyn SensorDataDynamic>>>
     ) -> Rc<RefCell<dyn SensorDynamic<Data = T>>> {
         unsafe { 
@@ -149,6 +149,27 @@ impl<T: SensorDataDynamic> SensorDynamicDowncast<T> for dyn SensorDynamic<Data =
         }
     }
 }
+
+pub trait SensorStaticDowncast<T: SensorDynamic>  {
+    fn sensor_static_downcast(
+        sensor: Rc<RefCell<dyn SensorDynamic<Data = dyn SensorDataDynamic>>>
+    ) -> Rc<RefCell<T>>;
+}
+
+impl<T: SensorDynamic, D: SensorDataDynamic> 
+SensorStaticDowncast<T> for dyn SensorDynamic<Data = D> {
+    fn sensor_static_downcast(
+        sensor: Rc<RefCell<dyn SensorDynamic<Data = dyn SensorDataDynamic>>>
+    ) -> Rc<RefCell<T>> {
+        unsafe { 
+            mem::transmute_copy::<
+                Rc<RefCell<dyn SensorDynamic<Data = dyn SensorDataDynamic>>>,
+                Rc<RefCell<T>>, 
+            >(&sensor) 
+        }
+    }
+}
+
 
 // Fast
 
