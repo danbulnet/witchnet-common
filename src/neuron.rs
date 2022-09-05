@@ -13,6 +13,12 @@ pub struct NeuronID {
     pub parent_id: Rc<str>
 }
 
+impl NeuronID {
+    pub fn new(id: &str, parent_id: &str) -> NeuronID {
+        NeuronID { id: Rc::from(id), parent_id: Rc::from(parent_id) }
+    }
+}
+
 pub trait Neuron {
     fn id(&self) -> NeuronID;
 
