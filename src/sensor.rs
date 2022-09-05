@@ -137,7 +137,7 @@ pub trait SensorDynamicDowncast<T: SensorDataDynamic> {
     ) -> Rc<RefCell<dyn SensorDynamic<Data = T>>>;
 }
 
-impl<T: SensorDataDynamic> SensorDynamicDowncast<T> for T {
+impl<T: SensorDataDynamic> SensorDynamicDowncast<T> for dyn SensorDynamic<Data = T> {
     fn downcast_sensor(
         sensor: Rc<RefCell<dyn SensorDynamic<Data = dyn SensorDataDynamic>>>
     ) -> Rc<RefCell<dyn SensorDynamic<Data = T>>> {
