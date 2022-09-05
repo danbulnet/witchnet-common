@@ -111,7 +111,7 @@ pub trait SensorDynamic: Any {
 
     fn data_category(&self) -> DataCategory;
     
-    fn insert(&mut self, item: &dyn SensorDataDynamic) -> Rc<RefCell<dyn Neuron>>;
+    fn insert(&mut self, item: &Self::Data) -> Rc<RefCell<dyn Neuron>>;
     
     fn search(&self, item: &Self::Data) -> Option<Rc<RefCell<dyn Neuron>>>;
 
