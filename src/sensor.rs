@@ -24,7 +24,7 @@ pub trait SensorDataDynamicBase {
 }
 
 impl<T> SensorDataDynamicBase for T 
-where T: SensorDataDynamic + Display + PartialOrd + PartialEq + 'static {
+where T: SensorDataDynamic + Display + PartialOrd + PartialEq + Any + 'static {
     fn any(&self) -> &dyn Any { self }
 }
 
@@ -104,7 +104,7 @@ pub trait SensorDynamicBuilder<Key: SensorDataDynamic> {
     fn new(name: &str, data_category: DataCategory) -> Rc<RefCell<dyn SensorDynamic<Data = Key>>>;
 }
 
-pub trait SensorDynamic {
+pub trait SensorDynamic: Any {
     type Data: SensorDataDynamic; 
 
     fn name(&self) -> &str;
@@ -144,7 +144,7 @@ pub trait SensorFast {
 
     fn data_category(&self) -> DataCategory;
     
-    fn insert(&mut self, item: &Self::Data) -> Rc<RefCell<dyn Neuron>>;
+    fn insert<Data: SensorDataFast>(&mut self, item: &Data) -> Rc<RefCell<dyn Neuron>>;
     
     fn search(&self, item: &Self::Data) -> Option<Rc<RefCell<dyn Neuron>>>;
 
