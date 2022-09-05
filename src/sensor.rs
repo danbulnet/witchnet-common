@@ -4,7 +4,8 @@ use std::{
     collections::HashMap,
     fmt::Display,
     cmp::Ordering,
-    any::Any
+    any::Any,
+    mem
 };
 
 use num_traits::ToPrimitive;
@@ -130,6 +131,25 @@ pub trait SensorDynamic: Any {
     fn deactivate_sensor(&mut self);
 }
 
+pub trait SensorDynamicDowncast<T: SensorDataDynamic> {
+    fn downcast_sensor(
+        sensor: Rc<RefCell<dyn SensorDynamic<Data = dyn SensorDataDynamic>>>
+    ) -> Rc<RefCell<dyn SensorDynamic<Data = T>>>;
+}
+
+impl<T: SensorDataDynamic> SensorDynamicDowncast<T> for T {
+    fn downcast_sensor(
+        sensor: Rc<RefCell<dyn SensorDynamic<Data = dyn SensorDataDynamic>>>
+    ) -> Rc<RefCell<dyn SensorDynamic<Data = T>>> {
+        unsafe { 
+            mem::transmute_copy::<
+                Rc<RefCell<dyn SensorDynamic<Data = dyn SensorDataDynamic>>>,
+                Rc<RefCell<dyn SensorDynamic<Data = T>>>, 
+            >(&sensor) 
+        }
+    }
+}
+
 // Fast
 
 pub trait SensorDataFast: Display + Distance + PartialEq + PartialOrd + Copy {}
@@ -144,7 +164,7 @@ pub trait SensorFast {
 
     fn data_category(&self) -> DataCategory;
     
-    fn insert<Data: SensorDataFast>(&mut self, item: &Data) -> Rc<RefCell<dyn Neuron>>;
+    fn insert(&mut self, item: &Self::Data) -> Rc<RefCell<dyn Neuron>>;
     
     fn search(&self, item: &Self::Data) -> Option<Rc<RefCell<dyn Neuron>>>;
 
