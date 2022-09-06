@@ -1,5 +1,3 @@
-use std::rc::Rc;
-
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum DataCategory {
     Numerical,
@@ -41,7 +39,7 @@ impl_numerical! {
     f32, f64
 }
 
-impl_categorical! { String, bool, Rc<str> }
+impl_categorical! { String, bool }
 
 pub enum DataVec {
     BoolVec(Vec<bool>),
