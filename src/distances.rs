@@ -1,3 +1,5 @@
+use std::rc::Rc;
+
 use num_traits::ToPrimitive;
 
 pub trait Distance {
@@ -12,6 +14,12 @@ impl Distance for str {
 
 impl Distance for String {
     fn distance(&self, v: &String) -> f64  {
+        if *self == *v { 0.0 } else { 1.0 }
+    }
+}
+
+impl Distance for Rc<str> {
+    fn distance(&self, v: &Rc<str>) -> f64  {
         if *self == *v { 0.0 } else { 1.0 }
     }
 }

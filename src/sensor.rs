@@ -86,7 +86,7 @@ impl_distance_numeric! {
 }
 
 impl_distance_categoric! {
-    String, bool
+    String, Rc<str>, bool
 }
 
 impl Eq for dyn SensorDataDynamic {}
