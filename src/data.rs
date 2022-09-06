@@ -35,7 +35,7 @@ impl_numerical! {
 
 impl_categorical! { String, bool }
 
-pub enum SensorDataVec {
+pub enum DataVec {
     BoolVec(Vec<Option<bool>>),
     UInt8Vec(Vec<Option<u8>>),
     UInt16Vec(Vec<Option<u16>>),
