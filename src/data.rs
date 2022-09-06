@@ -12,6 +12,9 @@ macro_rules! impl_numerical {
         }
         impl From<&[$t]> for DataCategory {
             fn from(_data: &[$t]) -> DataCategory { DataCategory::Numerical }
+        }
+        impl From<&[Option<$t>]> for DataCategory {
+            fn from(_data: &[Option<$t>]) -> DataCategory { DataCategory::Numerical }
         }) *
     }
 }
@@ -23,6 +26,9 @@ macro_rules! impl_categorical {
         }
         impl From<&[$t]> for DataCategory {
             fn from(_data: &[$t]) -> DataCategory { DataCategory::Categorical }
+        }
+        impl From<&[Option<$t>]> for DataCategory {
+            fn from(_data: &[Option<$t>]) -> DataCategory { DataCategory::Categorical }
         }) *
     }
 }
