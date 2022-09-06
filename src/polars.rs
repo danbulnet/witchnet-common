@@ -9,7 +9,7 @@ pub fn csv_to_dataframe(filename: &str) -> Result<DataFrame> {
     CsvReader::new(file).infer_schema(None).has_header(true).finish()
 }
 
-pub fn series_to_vec(series: &Series) -> Result<DataVec> {
+pub fn series_to_datavec(series: &Series) -> Result<DataVec> {
     match series.dtype() {
         DataType::UInt8 => Ok(DataVec::UInt8Vec(
             series.u8()?.into_iter().filter(|x| x.is_some()).map(|x| x.unwrap()).collect()
