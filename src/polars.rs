@@ -9,22 +9,42 @@ pub fn csv_to_dataframe(filename: &str) -> Result<DataFrame> {
     CsvReader::new(file).infer_schema(None).has_header(true).finish()
 }
 
-pub fn series_to_vec(series: &Series) -> DataVec {
+pub fn series_to_vec(series: &Series) -> Result<DataVec> {
     match series.dtype() {
-        DataType::Boolean => DataVec::BoolVec(series.bool().unwrap().into_iter().collect()),
-        DataType::UInt8 => DataVec::UInt8Vec(series.u8().unwrap().into_iter().collect()),
-        DataType::UInt16 => DataVec::UInt16Vec(series.u16().unwrap().into_iter().collect()),
-        DataType::UInt32 => DataVec::UInt32Vec(series.u32().unwrap().into_iter().collect()),
-        DataType::UInt64 => DataVec::UInt64Vec(series.u64().unwrap().into_iter().collect()),
-        DataType::Int8 => DataVec::Int8Vec(series.i8().unwrap().into_iter().collect()),
-        DataType::Int16 => DataVec::Int16Vec(series.i16().unwrap().into_iter().collect()),
-        DataType::Int32 => DataVec::Int32Vec(series.i32().unwrap().into_iter().collect()),
-        DataType::Int64 => DataVec::Int64Vec(series.i64().unwrap().into_iter().collect()),
-        DataType::Float32 => DataVec::Float32Vec(series.f32().unwrap().into_iter().collect()),
-        DataType::Float64 => DataVec::Float64Vec(series.f64().unwrap().into_iter().collect()),
-        DataType::Utf8 => DataVec::Utf8Vec(series.utf8().unwrap().into_iter().map(
-            |v| match v { Some(val) => Some(val.to_string()), None => None }
-        ).collect()),
-        _ => DataVec::Unknown
+        DataType::UInt8 => Ok(DataVec::UInt8Vec(
+            series.u8()?.into_iter().filter(|x| x.is_some()).map(|x| x.unwrap()).collect()
+        )),
+        DataType::UInt16 => Ok(DataVec::UInt16Vec(
+            series.u16()?.into_iter().filter(|x| x.is_some()).map(|x| x.unwrap()).collect()
+        )),
+        DataType::UInt32 => Ok(DataVec::UInt32Vec(
+            series.u32()?.into_iter().filter(|x| x.is_some()).map(|x| x.unwrap()).collect()
+        )),
+        DataType::UInt64 => Ok(DataVec::UInt64Vec(
+            series.u64()?.into_iter().filter(|x| x.is_some()).map(|x| x.unwrap()).collect()
+        )),
+        DataType::Int8 => Ok(DataVec::Int8Vec(
+            series.i8()?.into_iter().filter(|x| x.is_some()).map(|x| x.unwrap()).collect()
+        )),
+        DataType::Int16 => Ok(DataVec::Int16Vec(
+            series.i16()?.into_iter().filter(|x| x.is_some()).map(|x| x.unwrap()).collect()
+        )),
+        DataType::Int32 => Ok(DataVec::Int32Vec(
+            series.i32()?.into_iter().filter(|x| x.is_some()).map(|x| x.unwrap()).collect()
+        )),
+        DataType::Int64 => Ok(DataVec::Int64Vec(
+            series.i64()?.into_iter().filter(|x| x.is_some()).map(|x| x.unwrap()).collect()
+        )),
+        DataType::Float32 => Ok(DataVec::Float32Vec(
+            series.f32()?.into_iter().filter(|x| x.is_some()).map(|x| x.unwrap()).collect()
+        )),
+        DataType::Float64 => Ok(DataVec::Float64Vec(
+            series.f64()?.into_iter().filter(|x| x.is_some()).map(|x| x.unwrap()).collect()
+        )),
+        DataType::Utf8 => Ok(DataVec::Utf8Vec(
+            series.utf8()?.into_iter()
+                .filter(|x| x.is_some()).map(|x| x.unwrap().to_string()).collect()
+        )),
+        _ => Ok(DataVec::Unknown)
     }
 }

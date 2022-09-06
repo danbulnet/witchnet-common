@@ -42,17 +42,17 @@ impl_numerical! {
 impl_categorical! { String, bool }
 
 pub enum DataVec {
-    BoolVec(Vec<Option<bool>>),
-    UInt8Vec(Vec<Option<u8>>),
-    UInt16Vec(Vec<Option<u16>>),
-    UInt32Vec(Vec<Option<u32>>),
-    UInt64Vec(Vec<Option<u64>>),
-    Int8Vec(Vec<Option<i8>>),
-    Int16Vec(Vec<Option<i16>>),
-    Int32Vec(Vec<Option<i32>>),
-    Int64Vec(Vec<Option<i64>>),
-    Float32Vec(Vec<Option<f32>>),
-    Float64Vec(Vec<Option<f64>>),
-    Utf8Vec(Vec<Option<String>>),
+    BoolVec(Vec<bool>),
+    UInt8Vec(Vec<u8>),
+    UInt16Vec(Vec<u16>),
+    UInt32Vec(Vec<u32>),
+    UInt64Vec(Vec<u64>),
+    Int8Vec(Vec<i8>),
+    Int16Vec(Vec<i16>),
+    Int32Vec(Vec<i32>),
+    Int64Vec(Vec<i64>),
+    Float32Vec(Vec<f32>),
+    Float64Vec(Vec<f64>),
+    Utf8Vec(Vec<String>),
     Unknown
 }
