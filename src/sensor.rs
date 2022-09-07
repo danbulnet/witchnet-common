@@ -122,13 +122,13 @@ pub trait Sensor<D: SensorData>: Any {
     fn deactivate_sensor(&mut self);
 }
 
-pub trait SensorDowncast<S: Sensor<D>, D: SensorData> {
+pub trait SensorDowncast<D: SensorData> {
     fn sensor_dynamic_downcast(
         sensor: Rc<RefCell<dyn Sensor<dyn SensorData>>>
     ) -> Rc<RefCell<dyn Sensor<D>>>;
 }
 
-impl<S: Sensor<D>, D: SensorData> SensorDowncast<S, D> for dyn Sensor<D> {
+impl<D: SensorData> SensorDowncast<D> for dyn Sensor<D> {
     fn sensor_dynamic_downcast(
         sensor: Rc<RefCell<dyn Sensor<dyn SensorData>>>
     ) -> Rc<RefCell<dyn Sensor<D>>> {
@@ -154,6 +154,6 @@ SensorStaticDowncast<S, D> for dyn Sensor<D> {
     ) -> *mut S { &*sensor.borrow() as *const _ as *mut S }
 }
 
-pub trait SensorBuilder<Key: SensorData> {
-    fn new(name: &str, data_category: DataCategory) -> Rc<RefCell<dyn Sensor<Key>>>;
+pub trait SensorBuilder<D: SensorData> {
+    fn new(name: &str, data_category: DataCategory) -> Rc<RefCell<dyn Sensor<D>>>;
 }
