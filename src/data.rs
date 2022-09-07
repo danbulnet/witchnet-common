@@ -1,4 +1,7 @@
-use std::rc::Rc;
+use std::{
+    rc::Rc,
+    marker::PhantomData
+};
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum DataCategory {
@@ -100,76 +103,164 @@ impl !UnknownDataTypeMarker for f64 {}
 impl !UnknownDataTypeMarker for Rc<str> {}
 impl !UnknownDataTypeMarker for String {}
 
-pub trait DataTypeMarker { fn data_type(&self) -> DataType; }
+impl !UnknownDataTypeMarker for PhantomData<bool> {}
+impl !UnknownDataTypeMarker for PhantomData<u8> {}
+impl !UnknownDataTypeMarker for PhantomData<u16> {}
+impl !UnknownDataTypeMarker for PhantomData<u32> {}
+impl !UnknownDataTypeMarker for PhantomData<u64> {}
+impl !UnknownDataTypeMarker for PhantomData<u128> {}
+impl !UnknownDataTypeMarker for PhantomData<usize> {}
+impl !UnknownDataTypeMarker for PhantomData<i8> {}
+impl !UnknownDataTypeMarker for PhantomData<i16> {}
+impl !UnknownDataTypeMarker for PhantomData<i32> {}
+impl !UnknownDataTypeMarker for PhantomData<i64> {}
+impl !UnknownDataTypeMarker for PhantomData<i128> {}
+impl !UnknownDataTypeMarker for PhantomData<isize> {}
+impl !UnknownDataTypeMarker for PhantomData<f32> {}
+impl !UnknownDataTypeMarker for PhantomData<f64> {}
+impl !UnknownDataTypeMarker for PhantomData<Rc<str>> {}
+impl !UnknownDataTypeMarker for PhantomData<String> {}
 
-impl<T: UnknownDataTypeMarker> DataTypeMarker for T {
+pub trait DataTypeDeductor { 
+    fn data_type(&self) -> DataType;
+ }
+
+impl<T: UnknownDataTypeMarker> DataTypeDeductor for T {
     fn data_type(&self) -> DataType { DataType::Unknown }
 }
 
-impl DataTypeMarker for bool {
+impl DataTypeDeductor for bool {
     fn data_type(&self) -> DataType { DataType::Bool }
 }
 
-impl DataTypeMarker for u8 {
+impl DataTypeDeductor for u8 {
     fn data_type(&self) -> DataType { DataType::U8 }
 }
 
-impl DataTypeMarker for u16 {
+impl DataTypeDeductor for u16 {
     fn data_type(&self) -> DataType { DataType::U16 }
 }
 
-impl DataTypeMarker for u32 {
+impl DataTypeDeductor for u32 {
     fn data_type(&self) -> DataType { DataType::U32 }
 }
 
-impl DataTypeMarker for u64 {
+impl DataTypeDeductor for u64 {
     fn data_type(&self) -> DataType { DataType::U64 }
 }
 
-impl DataTypeMarker for u128 {
+impl DataTypeDeductor for u128 {
     fn data_type(&self) -> DataType { DataType::USize }
 }
 
-impl DataTypeMarker for usize {
+impl DataTypeDeductor for usize {
     fn data_type(&self) -> DataType { DataType::U128 }
 }
 
-impl DataTypeMarker for i8 {
+impl DataTypeDeductor for i8 {
     fn data_type(&self) -> DataType { DataType::I8 }
 }
 
-impl DataTypeMarker for i16 {
+impl DataTypeDeductor for i16 {
     fn data_type(&self) -> DataType { DataType::I16 }
 }
 
-impl DataTypeMarker for i32 {
+impl DataTypeDeductor for i32 {
     fn data_type(&self) -> DataType { DataType::I32 }
 }
 
-impl DataTypeMarker for i64 {
+impl DataTypeDeductor for i64 {
     fn data_type(&self) -> DataType { DataType::I64 }
 }
 
-impl DataTypeMarker for i128 {
+impl DataTypeDeductor for i128 {
     fn data_type(&self) -> DataType { DataType::I128 }
 }
 
-impl DataTypeMarker for isize {
+impl DataTypeDeductor for isize {
     fn data_type(&self) -> DataType { DataType::ISize }
 }
 
-impl DataTypeMarker for f32 {
+impl DataTypeDeductor for f32 {
     fn data_type(&self) -> DataType { DataType::F32 }
 }
 
-impl DataTypeMarker for f64 {
+impl DataTypeDeductor for f64 {
     fn data_type(&self) -> DataType { DataType::F64 }
 }
 
-impl DataTypeMarker for Rc<str> {
+impl DataTypeDeductor for Rc<str> {
     fn data_type(&self) -> DataType { DataType::RcStr }
 }
 
-impl DataTypeMarker for String {
+impl DataTypeDeductor for String {
+    fn data_type(&self) -> DataType { DataType::String }
+}
+
+impl DataTypeDeductor for PhantomData<bool> {
+    fn data_type(&self) -> DataType { DataType::Bool }
+}
+
+impl DataTypeDeductor for PhantomData<u8> {
+    fn data_type(&self) -> DataType { DataType::U8 }
+}
+
+impl DataTypeDeductor for PhantomData<u16> {
+    fn data_type(&self) -> DataType { DataType::U16 }
+}
+
+impl DataTypeDeductor for PhantomData<u32> {
+    fn data_type(&self) -> DataType { DataType::U32 }
+}
+
+impl DataTypeDeductor for PhantomData<u64> {
+    fn data_type(&self) -> DataType { DataType::U64 }
+}
+
+impl DataTypeDeductor for PhantomData<u128> {
+    fn data_type(&self) -> DataType { DataType::USize }
+}
+
+impl DataTypeDeductor for PhantomData<usize> {
+    fn data_type(&self) -> DataType { DataType::U128 }
+}
+
+impl DataTypeDeductor for PhantomData<i8> {
+    fn data_type(&self) -> DataType { DataType::I8 }
+}
+
+impl DataTypeDeductor for PhantomData<i16> {
+    fn data_type(&self) -> DataType { DataType::I16 }
+}
+
+impl DataTypeDeductor for PhantomData<i32> {
+    fn data_type(&self) -> DataType { DataType::I32 }
+}
+
+impl DataTypeDeductor for PhantomData<i64> {
+    fn data_type(&self) -> DataType { DataType::I64 }
+}
+
+impl DataTypeDeductor for PhantomData<i128> {
+    fn data_type(&self) -> DataType { DataType::I128 }
+}
+
+impl DataTypeDeductor for PhantomData<isize> {
+    fn data_type(&self) -> DataType { DataType::ISize }
+}
+
+impl DataTypeDeductor for PhantomData<f32> {
+    fn data_type(&self) -> DataType { DataType::F32 }
+}
+
+impl DataTypeDeductor for PhantomData<f64> {
+    fn data_type(&self) -> DataType { DataType::F64 }
+}
+
+impl DataTypeDeductor for PhantomData<Rc<str>> {
+    fn data_type(&self) -> DataType { DataType::RcStr }
+}
+
+impl DataTypeDeductor for PhantomData<String> {
     fn data_type(&self) -> DataType { DataType::String }
 }
