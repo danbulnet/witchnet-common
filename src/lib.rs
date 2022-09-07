@@ -1,3 +1,6 @@
+#![feature(negative_impls)]
+#![feature(auto_traits)]
+
 pub mod sensor;
 pub mod distances;
 pub mod data;

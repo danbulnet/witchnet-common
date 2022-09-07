@@ -1,7 +1,4 @@
-use std::{
-    rc::Rc,
-    marker::PhantomData
-};
+use std::rc::Rc;
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum DataCategory {
@@ -69,11 +66,13 @@ pub enum DataType {
     U32,
     U64,
     U128,
+    USize,
     I8,
     I16,
     I32,
     I64,
     I128,
+    ISize,
     F32,
     F64,
     RcStr,
@@ -81,66 +80,96 @@ pub enum DataType {
     Unknown
 }
 
-pub trait DataTypeMarker {
-    const DATA_TYPE: DataType = DataType::Unknown;
-}   
+pub auto trait UnknownDataTypeMarker {}
 
-impl DataTypeMarker for PhantomData<bool> {
-    const DATA_TYPE: DataType = DataType::Bool;
+impl !UnknownDataTypeMarker for bool {}
+impl !UnknownDataTypeMarker for u8 {}
+impl !UnknownDataTypeMarker for u16 {}
+impl !UnknownDataTypeMarker for u32 {}
+impl !UnknownDataTypeMarker for u64 {}
+impl !UnknownDataTypeMarker for u128 {}
+impl !UnknownDataTypeMarker for usize {}
+impl !UnknownDataTypeMarker for i8 {}
+impl !UnknownDataTypeMarker for i16 {}
+impl !UnknownDataTypeMarker for i32 {}
+impl !UnknownDataTypeMarker for i64 {}
+impl !UnknownDataTypeMarker for i128 {}
+impl !UnknownDataTypeMarker for isize {}
+impl !UnknownDataTypeMarker for f32 {}
+impl !UnknownDataTypeMarker for f64 {}
+impl !UnknownDataTypeMarker for Rc<str> {}
+impl !UnknownDataTypeMarker for String {}
+
+pub trait DataTypeMarker { fn data_type(&self) -> DataType; }
+
+impl<T: UnknownDataTypeMarker> DataTypeMarker for T {
+    fn data_type(&self) -> DataType { DataType::Unknown }
 }
 
-impl DataTypeMarker for PhantomData<u8> {
-    const DATA_TYPE: DataType = DataType::U8;
+impl DataTypeMarker for bool {
+    fn data_type(&self) -> DataType { DataType::Bool }
 }
 
-impl DataTypeMarker for PhantomData<u16> {
-    const DATA_TYPE: DataType = DataType::U16;
+impl DataTypeMarker for u8 {
+    fn data_type(&self) -> DataType { DataType::U8 }
 }
 
-impl DataTypeMarker for PhantomData<u32> {
-    const DATA_TYPE: DataType = DataType::U32;
+impl DataTypeMarker for u16 {
+    fn data_type(&self) -> DataType { DataType::U16 }
 }
 
-impl DataTypeMarker for PhantomData<u64> {
-    const DATA_TYPE: DataType = DataType::U64;
+impl DataTypeMarker for u32 {
+    fn data_type(&self) -> DataType { DataType::U32 }
 }
 
-impl DataTypeMarker for PhantomData<u128> {
-    const DATA_TYPE: DataType = DataType::U128;
+impl DataTypeMarker for u64 {
+    fn data_type(&self) -> DataType { DataType::U64 }
 }
 
-impl DataTypeMarker for PhantomData<i8> {
-    const DATA_TYPE: DataType = DataType::I8;
+impl DataTypeMarker for u128 {
+    fn data_type(&self) -> DataType { DataType::USize }
 }
 
-impl DataTypeMarker for PhantomData<i16> {
-    const DATA_TYPE: DataType = DataType::I16;
+impl DataTypeMarker for usize {
+    fn data_type(&self) -> DataType { DataType::U128 }
 }
 
-impl DataTypeMarker for PhantomData<i32> {
-    const DATA_TYPE: DataType = DataType::I32;
+impl DataTypeMarker for i8 {
+    fn data_type(&self) -> DataType { DataType::I8 }
 }
 
-impl DataTypeMarker for PhantomData<i64> {
-    const DATA_TYPE: DataType = DataType::I64;
+impl DataTypeMarker for i16 {
+    fn data_type(&self) -> DataType { DataType::I16 }
 }
 
-impl DataTypeMarker for PhantomData<i128> {
-    const DATA_TYPE: DataType = DataType::I128;
+impl DataTypeMarker for i32 {
+    fn data_type(&self) -> DataType { DataType::I32 }
 }
 
-impl DataTypeMarker for PhantomData<f32> {
-    const DATA_TYPE: DataType = DataType::F32;
+impl DataTypeMarker for i64 {
+    fn data_type(&self) -> DataType { DataType::I64 }
 }
 
-impl DataTypeMarker for PhantomData<f64> {
-    const DATA_TYPE: DataType = DataType::F64;
+impl DataTypeMarker for i128 {
+    fn data_type(&self) -> DataType { DataType::I128 }
 }
 
-impl DataTypeMarker for PhantomData<Rc<str>> {
-    const DATA_TYPE: DataType = DataType::RcStr;
+impl DataTypeMarker for isize {
+    fn data_type(&self) -> DataType { DataType::ISize }
 }
 
-impl DataTypeMarker for PhantomData<String> {
-    const DATA_TYPE: DataType = DataType::String;
+impl DataTypeMarker for f32 {
+    fn data_type(&self) -> DataType { DataType::F32 }
+}
+
+impl DataTypeMarker for f64 {
+    fn data_type(&self) -> DataType { DataType::F64 }
+}
+
+impl DataTypeMarker for Rc<str> {
+    fn data_type(&self) -> DataType { DataType::RcStr }
+}
+
+impl DataTypeMarker for String {
+    fn data_type(&self) -> DataType { DataType::String }
 }

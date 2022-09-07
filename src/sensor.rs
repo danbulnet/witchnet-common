@@ -13,7 +13,7 @@ use num_traits::ToPrimitive;
 use dyn_clone::DynClone;
 
 use crate::{
-    data::{ DataCategory, DataType },
+    data::{ DataCategory, DataType, DataTypeMarker },
     neuron::{ Neuron, NeuronID }
 };
 
@@ -26,7 +26,7 @@ where T: SensorData + Display + PartialOrd + PartialEq + Any + 'static {
     fn any(&self) -> &dyn Any { self }
 }
 
-pub trait SensorData: SensorDataBase + Display + DynClone + 'static {
+pub trait SensorData: SensorDataBase + DataTypeMarker + Display + DynClone + 'static {
     fn equals(&self, rhs: &dyn SensorData) -> bool;
     fn partial_compare(&self, rhs: &dyn SensorData) -> Option<Ordering>;
     fn distance(&self, v: &dyn SensorData) -> f64;
