@@ -73,5 +73,5 @@ pub enum DataType {
     I128,
     F32,
     F64,
-    String,
+    RcStr
 }

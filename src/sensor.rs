@@ -1,11 +1,11 @@
 use std::{
     rc::Rc,
     cell::RefCell,
-    collections::HashMap,
     fmt::Display,
     cmp::Ordering,
     any::Any,
-    mem
+    mem,
+    collections::HashMap
 };
 
 use num_traits::ToPrimitive;
@@ -13,8 +13,8 @@ use num_traits::ToPrimitive;
 use dyn_clone::DynClone;
 
 use crate::{
-    neuron::{ Neuron, NeuronID },
-    data::DataCategory
+    data::{ DataCategory, DataType },
+    neuron::{ Neuron, NeuronID }
 };
 
 pub trait SensorDataBase {
@@ -100,6 +100,8 @@ impl PartialOrd for dyn SensorData + '_ {
 
 pub trait Sensor<D: SensorData>: Any {
     fn id(&self) -> &str;
+
+    fn data_type(&self) -> DataType;
 
     fn data_category(&self) -> DataCategory;
     
