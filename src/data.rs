@@ -1,4 +1,7 @@
-use std::rc::Rc;
+use std::{
+    rc::Rc,
+    marker::PhantomData
+};
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum DataCategory {
@@ -75,4 +78,64 @@ pub enum DataType {
     F64,
     RcStr,
     String
+}
+
+impl From<PhantomData<bool>> for DataType {
+    fn from(_data_type: PhantomData<bool>) -> DataType { DataType::Bool }
+}
+
+impl From<PhantomData<u8>> for DataType {
+    fn from(_data_type: PhantomData<u8>) -> DataType { DataType::U8 }
+}
+
+impl From<PhantomData<u16>> for DataType {
+    fn from(_data_type: PhantomData<u16>) -> DataType { DataType::U16 }
+}
+
+impl From<PhantomData<u32>> for DataType {
+    fn from(_data_type: PhantomData<u32>) -> DataType { DataType::U32 }
+}
+
+impl From<PhantomData<u64>> for DataType {
+    fn from(_data_type: PhantomData<u64>) -> DataType { DataType::U64 }
+}
+
+impl From<PhantomData<u128>> for DataType {
+    fn from(_data_type: PhantomData<u128>) -> DataType { DataType::U128 }
+}
+
+impl From<PhantomData<i8>> for DataType {
+    fn from(_data_type: PhantomData<i8>) -> DataType { DataType::I8 }
+}
+
+impl From<PhantomData<i16>> for DataType {
+    fn from(_data_type: PhantomData<i16>) -> DataType { DataType::I16 }
+}
+
+impl From<PhantomData<i32>> for DataType {
+    fn from(_data_type: PhantomData<i32>) -> DataType { DataType::I32 }
+}
+
+impl From<PhantomData<i64>> for DataType {
+    fn from(_data_type: PhantomData<i64>) -> DataType { DataType::I64 }
+}
+
+impl From<PhantomData<i128>> for DataType {
+    fn from(_data_type: PhantomData<i128>) -> DataType { DataType::I128 }
+}
+
+impl From<PhantomData<f32>> for DataType {
+    fn from(_data_type: PhantomData<f32>) -> DataType { DataType::F32 }
+}
+
+impl From<PhantomData<f64>> for DataType {
+    fn from(_data_type: PhantomData<f64>) -> DataType { DataType::F64 }
+}
+
+impl From<PhantomData<Rc<str>>> for DataType {
+    fn from(_data_type: PhantomData<Rc<str>>) -> DataType { DataType::RcStr }
+}
+
+impl From<PhantomData<String>> for DataType {
+    fn from(_data_type: PhantomData<String>) -> DataType { DataType::String }
 }
