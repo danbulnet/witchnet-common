@@ -77,65 +77,70 @@ pub enum DataType {
     F32,
     F64,
     RcStr,
-    String
+    String,
+    Unknown
 }
 
-impl From<PhantomData<bool>> for DataType {
-    fn from(_data_type: PhantomData<bool>) -> DataType { DataType::Bool }
+pub trait DataTypeMarker {
+    const DATA_TYPE: DataType = DataType::Unknown;
+}   
+
+impl DataTypeMarker for PhantomData<bool> {
+    const DATA_TYPE: DataType = DataType::Bool;
 }
 
-impl From<PhantomData<u8>> for DataType {
-    fn from(_data_type: PhantomData<u8>) -> DataType { DataType::U8 }
+impl DataTypeMarker for PhantomData<u8> {
+    const DATA_TYPE: DataType = DataType::U8;
 }
 
-impl From<PhantomData<u16>> for DataType {
-    fn from(_data_type: PhantomData<u16>) -> DataType { DataType::U16 }
+impl DataTypeMarker for PhantomData<u16> {
+    const DATA_TYPE: DataType = DataType::U16;
 }
 
-impl From<PhantomData<u32>> for DataType {
-    fn from(_data_type: PhantomData<u32>) -> DataType { DataType::U32 }
+impl DataTypeMarker for PhantomData<u32> {
+    const DATA_TYPE: DataType = DataType::U32;
 }
 
-impl From<PhantomData<u64>> for DataType {
-    fn from(_data_type: PhantomData<u64>) -> DataType { DataType::U64 }
+impl DataTypeMarker for PhantomData<u64> {
+    const DATA_TYPE: DataType = DataType::U64;
 }
 
-impl From<PhantomData<u128>> for DataType {
-    fn from(_data_type: PhantomData<u128>) -> DataType { DataType::U128 }
+impl DataTypeMarker for PhantomData<u128> {
+    const DATA_TYPE: DataType = DataType::U128;
 }
 
-impl From<PhantomData<i8>> for DataType {
-    fn from(_data_type: PhantomData<i8>) -> DataType { DataType::I8 }
+impl DataTypeMarker for PhantomData<i8> {
+    const DATA_TYPE: DataType = DataType::I8;
 }
 
-impl From<PhantomData<i16>> for DataType {
-    fn from(_data_type: PhantomData<i16>) -> DataType { DataType::I16 }
+impl DataTypeMarker for PhantomData<i16> {
+    const DATA_TYPE: DataType = DataType::I16;
 }
 
-impl From<PhantomData<i32>> for DataType {
-    fn from(_data_type: PhantomData<i32>) -> DataType { DataType::I32 }
+impl DataTypeMarker for PhantomData<i32> {
+    const DATA_TYPE: DataType = DataType::I32;
 }
 
-impl From<PhantomData<i64>> for DataType {
-    fn from(_data_type: PhantomData<i64>) -> DataType { DataType::I64 }
+impl DataTypeMarker for PhantomData<i64> {
+    const DATA_TYPE: DataType = DataType::I64;
 }
 
-impl From<PhantomData<i128>> for DataType {
-    fn from(_data_type: PhantomData<i128>) -> DataType { DataType::I128 }
+impl DataTypeMarker for PhantomData<i128> {
+    const DATA_TYPE: DataType = DataType::I128;
 }
 
-impl From<PhantomData<f32>> for DataType {
-    fn from(_data_type: PhantomData<f32>) -> DataType { DataType::F32 }
+impl DataTypeMarker for PhantomData<f32> {
+    const DATA_TYPE: DataType = DataType::F32;
 }
 
-impl From<PhantomData<f64>> for DataType {
-    fn from(_data_type: PhantomData<f64>) -> DataType { DataType::F64 }
+impl DataTypeMarker for PhantomData<f64> {
+    const DATA_TYPE: DataType = DataType::F64;
 }
 
-impl From<PhantomData<Rc<str>>> for DataType {
-    fn from(_data_type: PhantomData<Rc<str>>) -> DataType { DataType::RcStr }
+impl DataTypeMarker for PhantomData<Rc<str>> {
+    const DATA_TYPE: DataType = DataType::RcStr;
 }
 
-impl From<PhantomData<String>> for DataType {
-    fn from(_data_type: PhantomData<String>) -> DataType { DataType::String }
+impl DataTypeMarker for PhantomData<String> {
+    const DATA_TYPE: DataType = DataType::String;
 }
