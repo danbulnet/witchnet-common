@@ -122,13 +122,13 @@ pub trait Sensor<D: SensorData>: Any {
     fn deactivate_sensor(&mut self);
 }
 
-pub trait SensorDowncast<D: SensorData> {
+pub trait SensorDynamicDowncast<D: SensorData> {
     fn sensor_dynamic_downcast(
         sensor: Rc<RefCell<dyn Sensor<dyn SensorData>>>
     ) -> Rc<RefCell<dyn Sensor<D>>>;
 }
 
-impl<D: SensorData> SensorDowncast<D> for dyn Sensor<D> {
+impl<D: SensorData> SensorDynamicDowncast<D> for dyn Sensor<D> {
     fn sensor_dynamic_downcast(
         sensor: Rc<RefCell<dyn Sensor<dyn SensorData>>>
     ) -> Rc<RefCell<dyn Sensor<D>>> {
