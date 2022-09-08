@@ -98,7 +98,11 @@ impl PartialOrd for dyn SensorData + '_ {
     }
 }
 
-impl<T: UnknownDataTypeMarker + SensorData> DataTypeDeductor for T {
+pub trait SensorDataMarker {}
+
+impl<T: SensorData> SensorDataMarker for T {}
+
+impl<T: UnknownDataTypeMarker + SensorDataMarker> DataTypeDeductor for T {
     fn data_type(&self) -> DataType { DataType::Unknown }
 }
 
