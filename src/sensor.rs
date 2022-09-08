@@ -141,7 +141,7 @@ pub trait Sensor<D: SensorData>: Any {
 pub trait SensorDowncast<D: SensorData>: Sensor<D> {
     type Type: Sensor<D>;
 
-    fn downcast(sensor: &dyn Sensor<D>) -> Option<&Self::Type>;
+    fn downcast(sensor: &dyn Sensor<D>) -> &Self::Type;
     
-    fn downcast_mut(sensor: &mut dyn Sensor<D>) -> Option<&mut Self::Type>;
+    fn downcast_mut(sensor: &mut dyn Sensor<D>) -> &mut Self::Type;
 }
