@@ -4,7 +4,6 @@ use std::{
     fmt::Display,
     cmp::Ordering,
     any::Any,
-    mem,
     collections::HashMap,
     marker::PhantomData
 };
@@ -142,7 +141,7 @@ pub trait Sensor<D: SensorData>: Any {
 pub trait SensorDowncast<D: SensorData>: Sensor<D> {
     type Type: Sensor<D>;
 
-    fn downcast(&self) -> &Self::Type;
+    fn downcast(sensor: &dyn Sensor<D>) -> &Self::Type;
     
-    fn downcast_mut(&mut self) -> &mut Self::Type;
+    fn downcast_mut(sensor: &mut dyn Sensor<D>) -> &mut Self::Type;
 }
