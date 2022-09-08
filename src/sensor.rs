@@ -114,17 +114,11 @@ impl<T: UnknownDataTypeMarker + SensorDataMarker> DataDeductor for PhantomData<T
 }
 
 pub trait Sensor<D: SensorData>: Any {
-    type Type: Sensor<D>;
-
     fn id(&self) -> &str;
 
     fn data_type(&self) -> DataType;
 
     fn data_category(&self) -> DataCategory;
-
-    fn downcast(&self) -> &Self::Type;
-    
-    fn downcast_mut(&mut self) -> &mut Self::Type;
 
     fn insert(&mut self, item: &D) -> Rc<RefCell<dyn Neuron>>;
     
@@ -143,4 +137,12 @@ pub trait Sensor<D: SensorData>: Any {
     ) -> Result<(), String>;
 
     fn deactivate_sensor(&mut self);
+}
+
+pub trait SensorDowncast<D: SensorData>: Sensor<D> {
+    type Type: Sensor<D>;
+
+    fn downcast(&self) -> &Self::Type;
+    
+    fn downcast_mut(&mut self) -> &mut Self::Type;
 }
