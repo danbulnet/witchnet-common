@@ -18,16 +18,16 @@ use crate::{
     neuron::{ Neuron, NeuronID }
 };
 
-pub trait SensorDataBase {
+pub trait AnyCast {
     fn any(&self) -> &dyn Any;
 }
 
-impl<T> SensorDataBase for T 
+impl<T> AnyCast for T 
 where T: SensorData + Display + PartialOrd + PartialEq + Any + 'static {
     fn any(&self) -> &dyn Any { self }
 }
 
-pub trait SensorData: SensorDataBase + Display + DynClone + 'static {
+pub trait SensorData: AnyCast + Display + DynClone + 'static {
     fn equals(&self, rhs: &dyn SensorData) -> bool;
     fn partial_compare(&self, rhs: &dyn SensorData) -> Option<Ordering>;
     fn distance(&self, v: &dyn SensorData) -> f64;
@@ -114,12 +114,20 @@ impl<T: UnknownDataTypeMarker + SensorDataMarker> DataDeductor for PhantomData<T
 }
 
 pub trait Sensor<D: SensorData>: Any {
+    type Type: Sensor<D>;
+
+    fn new(name: &str) -> Self::Type;
+
     fn id(&self) -> &str;
 
     fn data_type(&self) -> DataType;
 
     fn data_category(&self) -> DataCategory;
+
+    fn downcast(&self) -> &Self::Type;
     
+    fn downcast_mut(&self) -> &mut Self::Type;
+
     fn insert(&mut self, item: &D) -> Rc<RefCell<dyn Neuron>>;
     
     fn search(&self, item: &D) -> Option<Rc<RefCell<dyn Neuron>>>;
@@ -139,38 +147,38 @@ pub trait Sensor<D: SensorData>: Any {
     fn deactivate_sensor(&mut self);
 }
 
-pub trait SensorDynamicDowncast<D: SensorData> {
-    fn sensor_dynamic_downcast(
-        sensor: Rc<RefCell<dyn Sensor<dyn SensorData>>>
-    ) -> Rc<RefCell<dyn Sensor<D>>>;
-}
+// pub trait SensorDynamicDowncast<D: SensorData> {
+//     fn sensor_dynamic_downcast(
+//         sensor: Rc<RefCell<dyn Sensor<dyn SensorData>>>
+//     ) -> Rc<RefCell<dyn Sensor<D>>>;
+// }
 
-impl<D: SensorData> SensorDynamicDowncast<D> for dyn Sensor<D> {
-    fn sensor_dynamic_downcast(
-        sensor: Rc<RefCell<dyn Sensor<dyn SensorData>>>
-    ) -> Rc<RefCell<dyn Sensor<D>>> {
-        unsafe { 
-            mem::transmute::<
-                Rc<RefCell<dyn Sensor<dyn SensorData>>>,
-                Rc<RefCell<dyn Sensor<D>>>, 
-            >(sensor) 
-        }
-    }
-}
+// impl<D: SensorData> SensorDynamicDowncast<D> for dyn Sensor<D> {
+//     fn sensor_dynamic_downcast(
+//         sensor: Rc<RefCell<dyn Sensor<dyn SensorData>>>
+//     ) -> Rc<RefCell<dyn Sensor<D>>> {
+//         unsafe { 
+//             mem::transmute::<
+//                 Rc<RefCell<dyn Sensor<dyn SensorData>>>,
+//                 Rc<RefCell<dyn Sensor<D>>>, 
+//             >(sensor) 
+//         }
+//     }
+// }
 
-pub trait SensorStaticDowncast<S: Sensor<D>, D: SensorData>  {
-    fn sensor_static_downcast(
-        sensor: Rc<RefCell<dyn Sensor<dyn SensorData>>>
-    ) -> *mut S;
-}
+// pub trait SensorStaticDowncast<S: Sensor<D>, D: SensorData>  {
+//     fn sensor_static_downcast(
+//         sensor: Rc<RefCell<dyn Sensor<dyn SensorData>>>
+//     ) -> *mut S;
+// }
 
-impl<S: Sensor<D>, D: SensorData> 
-SensorStaticDowncast<S, D> for dyn Sensor<D> {
-    fn sensor_static_downcast(
-        sensor: Rc<RefCell<dyn Sensor<dyn SensorData>>>
-    ) -> *mut S { &*sensor.borrow() as *const _ as *mut S }
-}
+// impl<S: Sensor<D>, D: SensorData> 
+// SensorStaticDowncast<S, D> for dyn Sensor<D> {
+//     fn sensor_static_downcast(
+//         sensor: Rc<RefCell<dyn Sensor<dyn SensorData>>>
+//     ) -> *mut S { &*sensor.borrow() as *const _ as *mut S }
+// }
 
-pub trait SensorBuilder<D: SensorData> {
-    fn new(name: &str) -> Rc<RefCell<dyn Sensor<D>>>;
-}
+// pub trait SensorBuilder<D: SensorData> {
+//     fn new(name: &str) -> Rc<RefCell<dyn Sensor<D>>>;
+// }
