@@ -5,7 +5,8 @@ use std::{
     cmp::Ordering,
     any::Any,
     mem,
-    collections::HashMap
+    collections::HashMap,
+    marker::PhantomData
 };
 
 use num_traits::ToPrimitive;
@@ -103,6 +104,10 @@ pub trait SensorDataMarker {}
 impl<T: SensorData> SensorDataMarker for T {}
 
 impl<T: UnknownDataTypeMarker + SensorDataMarker> DataTypeDeductor for T {
+    fn data_type(&self) -> DataType { DataType::Unknown }
+}
+
+impl<T: UnknownDataTypeMarker + SensorDataMarker> DataTypeDeductor for PhantomData<T> {
     fn data_type(&self) -> DataType { DataType::Unknown }
 }
 
