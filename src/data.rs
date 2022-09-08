@@ -121,142 +121,177 @@ impl !UnknownDataTypeMarker for PhantomData<f64> {}
 impl !UnknownDataTypeMarker for PhantomData<Rc<str>> {}
 impl !UnknownDataTypeMarker for PhantomData<String> {}
 
-pub trait DataTypeDeductor { 
+pub trait DataDeductor { 
     fn data_type(&self) -> DataType;
+    fn data_category(&self) -> DataCategory;
  }
 
-impl DataTypeDeductor for bool {
+impl DataDeductor for bool {
     fn data_type(&self) -> DataType { DataType::Bool }
+    fn data_category(&self) -> DataCategory { DataCategory::Categorical }
 }
 
-impl DataTypeDeductor for u8 {
+impl DataDeductor for u8 {
     fn data_type(&self) -> DataType { DataType::U8 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for u16 {
+impl DataDeductor for u16 {
     fn data_type(&self) -> DataType { DataType::U16 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for u32 {
+impl DataDeductor for u32 {
     fn data_type(&self) -> DataType { DataType::U32 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for u64 {
+impl DataDeductor for u64 {
     fn data_type(&self) -> DataType { DataType::U64 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for u128 {
-    fn data_type(&self) -> DataType { DataType::USize }
-}
-
-impl DataTypeDeductor for usize {
+impl DataDeductor for usize {
     fn data_type(&self) -> DataType { DataType::U128 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for i8 {
+impl DataDeductor for u128 {
+    fn data_type(&self) -> DataType { DataType::USize }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
+}
+
+impl DataDeductor for i8 {
     fn data_type(&self) -> DataType { DataType::I8 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for i16 {
+impl DataDeductor for i16 {
     fn data_type(&self) -> DataType { DataType::I16 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for i32 {
+impl DataDeductor for i32 {
     fn data_type(&self) -> DataType { DataType::I32 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for i64 {
+impl DataDeductor for i64 {
     fn data_type(&self) -> DataType { DataType::I64 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for i128 {
+impl DataDeductor for i128 {
     fn data_type(&self) -> DataType { DataType::I128 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for isize {
+impl DataDeductor for isize {
     fn data_type(&self) -> DataType { DataType::ISize }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for f32 {
+impl DataDeductor for f32 {
     fn data_type(&self) -> DataType { DataType::F32 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for f64 {
+impl DataDeductor for f64 {
     fn data_type(&self) -> DataType { DataType::F64 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for Rc<str> {
+impl DataDeductor for Rc<str> {
     fn data_type(&self) -> DataType { DataType::RcStr }
+    fn data_category(&self) -> DataCategory { DataCategory::Categorical }
 }
 
-impl DataTypeDeductor for String {
+impl DataDeductor for String {
     fn data_type(&self) -> DataType { DataType::String }
+    fn data_category(&self) -> DataCategory { DataCategory::Categorical }
 }
 
-impl DataTypeDeductor for PhantomData<bool> {
+impl DataDeductor for PhantomData<bool> {
     fn data_type(&self) -> DataType { DataType::Bool }
+    fn data_category(&self) -> DataCategory { DataCategory::Categorical }
 }
 
-impl DataTypeDeductor for PhantomData<u8> {
+impl DataDeductor for PhantomData<u8> {
     fn data_type(&self) -> DataType { DataType::U8 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for PhantomData<u16> {
+impl DataDeductor for PhantomData<u16> {
     fn data_type(&self) -> DataType { DataType::U16 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for PhantomData<u32> {
+impl DataDeductor for PhantomData<u32> {
     fn data_type(&self) -> DataType { DataType::U32 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for PhantomData<u64> {
+impl DataDeductor for PhantomData<u64> {
     fn data_type(&self) -> DataType { DataType::U64 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for PhantomData<u128> {
-    fn data_type(&self) -> DataType { DataType::USize }
-}
-
-impl DataTypeDeductor for PhantomData<usize> {
+impl DataDeductor for PhantomData<usize> {
     fn data_type(&self) -> DataType { DataType::U128 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for PhantomData<i8> {
+impl DataDeductor for PhantomData<u128> {
+    fn data_type(&self) -> DataType { DataType::USize }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
+}
+
+impl DataDeductor for PhantomData<i8> {
     fn data_type(&self) -> DataType { DataType::I8 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for PhantomData<i16> {
+impl DataDeductor for PhantomData<i16> {
     fn data_type(&self) -> DataType { DataType::I16 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for PhantomData<i32> {
+impl DataDeductor for PhantomData<i32> {
     fn data_type(&self) -> DataType { DataType::I32 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for PhantomData<i64> {
+impl DataDeductor for PhantomData<i64> {
     fn data_type(&self) -> DataType { DataType::I64 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for PhantomData<i128> {
+impl DataDeductor for PhantomData<i128> {
     fn data_type(&self) -> DataType { DataType::I128 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for PhantomData<isize> {
+impl DataDeductor for PhantomData<isize> {
     fn data_type(&self) -> DataType { DataType::ISize }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for PhantomData<f32> {
+impl DataDeductor for PhantomData<f32> {
     fn data_type(&self) -> DataType { DataType::F32 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for PhantomData<f64> {
+impl DataDeductor for PhantomData<f64> {
     fn data_type(&self) -> DataType { DataType::F64 }
+    fn data_category(&self) -> DataCategory { DataCategory::Numerical }
 }
 
-impl DataTypeDeductor for PhantomData<Rc<str>> {
+impl DataDeductor for PhantomData<Rc<str>> {
     fn data_type(&self) -> DataType { DataType::RcStr }
+    fn data_category(&self) -> DataCategory { DataCategory::Categorical }
 }
 
-impl DataTypeDeductor for PhantomData<String> {
+impl DataDeductor for PhantomData<String> {
     fn data_type(&self) -> DataType { DataType::String }
+    fn data_category(&self) -> DataCategory { DataCategory::Categorical }
 }

@@ -14,7 +14,7 @@ use num_traits::ToPrimitive;
 use dyn_clone::DynClone;
 
 use crate::{
-    data::{ DataCategory, DataType, DataTypeDeductor, UnknownDataTypeMarker },
+    data::{ DataCategory, DataType, DataDeductor, UnknownDataTypeMarker },
     neuron::{ Neuron, NeuronID }
 };
 
@@ -103,12 +103,14 @@ pub trait SensorDataMarker {}
 
 impl<T: SensorData> SensorDataMarker for T {}
 
-impl<T: UnknownDataTypeMarker + SensorDataMarker> DataTypeDeductor for T {
+impl<T: UnknownDataTypeMarker + SensorDataMarker> DataDeductor for T {
     fn data_type(&self) -> DataType { DataType::Unknown }
+    fn data_category(&self) -> DataCategory { DataCategory::Categorical }
 }
 
-impl<T: UnknownDataTypeMarker + SensorDataMarker> DataTypeDeductor for PhantomData<T> {
+impl<T: UnknownDataTypeMarker + SensorDataMarker> DataDeductor for PhantomData<T> {
     fn data_type(&self) -> DataType { DataType::Unknown }
+    fn data_category(&self) -> DataCategory { DataCategory::Categorical }
 }
 
 pub trait Sensor<D: SensorData>: Any {
