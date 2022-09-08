@@ -13,7 +13,7 @@ use num_traits::ToPrimitive;
 use dyn_clone::DynClone;
 
 use crate::{
-    data::{ DataCategory, DataType, DataTypeDeductor },
+    data::{ DataCategory, DataType, DataTypeDeductor, UnknownDataTypeMarker },
     neuron::{ Neuron, NeuronID }
 };
 
@@ -96,6 +96,10 @@ impl PartialOrd for dyn SensorData + '_ {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> { 
         self.partial_compare(other) 
     }
+}
+
+impl<T: UnknownDataTypeMarker + SensorData> DataTypeDeductor for T {
+    fn data_type(&self) -> DataType { DataType::Unknown }
 }
 
 pub trait Sensor<D: SensorData>: Any {

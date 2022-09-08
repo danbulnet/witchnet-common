@@ -125,10 +125,6 @@ pub trait DataTypeDeductor {
     fn data_type(&self) -> DataType;
  }
 
-// impl<T: UnknownDataTypeMarker> DataTypeDeductor for T {
-//     fn data_type(&self) -> DataType { DataType::Unknown }
-// }
-
 impl DataTypeDeductor for bool {
     fn data_type(&self) -> DataType { DataType::Bool }
 }
