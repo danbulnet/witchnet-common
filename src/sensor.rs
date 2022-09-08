@@ -5,7 +5,8 @@ use std::{
     cmp::Ordering,
     any::Any,
     collections::HashMap,
-    marker::PhantomData
+    marker::PhantomData,
+    mem
 };
 
 use num_traits::ToPrimitive;
@@ -138,10 +139,34 @@ pub trait Sensor<D: SensorData>: Any {
     fn deactivate_sensor(&mut self);
 }
 
-pub trait SensorDowncast<D: SensorData>: Sensor<D> {
-    type Type: Sensor<D>;
+pub trait SensorDynamicDowncast<D: SensorData> {
+    fn sensor_dynamic_downcast(
+        sensor: Rc<RefCell<dyn Sensor<dyn SensorData>>>
+    ) -> Rc<RefCell<dyn Sensor<D>>>;
+}
 
-    fn downcast(sensor: &dyn Sensor<D>) -> &Self::Type;
-    
-    fn downcast_mut(sensor: &mut dyn Sensor<D>) -> &mut Self::Type;
+impl<D: SensorData> SensorDynamicDowncast<D> for dyn Sensor<D> {
+    fn sensor_dynamic_downcast(
+        sensor: Rc<RefCell<dyn Sensor<dyn SensorData>>>
+    ) -> Rc<RefCell<dyn Sensor<D>>> {
+        unsafe { 
+            mem::transmute::<
+                Rc<RefCell<dyn Sensor<dyn SensorData>>>,
+                Rc<RefCell<dyn Sensor<D>>>, 
+            >(sensor) 
+        }
+    }
+}
+
+pub trait SensorStaticDowncast<S: Sensor<D>, D: SensorData>  {
+    fn sensor_static_downcast(
+        sensor: Rc<RefCell<dyn Sensor<dyn SensorData>>>
+    ) -> *mut S;
+}
+
+impl<S: Sensor<D>, D: SensorData> 
+SensorStaticDowncast<S, D> for dyn Sensor<D> {
+    fn sensor_static_downcast(
+        sensor: Rc<RefCell<dyn Sensor<dyn SensorData>>>
+    ) -> *mut S { &*sensor.borrow() as *const _ as *mut S }
 }
