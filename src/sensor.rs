@@ -170,5 +170,5 @@ SensorStaticDowncast<S, D> for dyn Sensor<D> {
 }
 
 pub trait SensorBuilder<D: SensorData> {
-    fn new(name: &str, data_category: DataCategory) -> Rc<RefCell<dyn Sensor<D>>>;
+    fn new(name: &str) -> Rc<RefCell<dyn Sensor<D>>>;
 }
