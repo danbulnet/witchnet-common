@@ -1,7 +1,10 @@
 use std::{
     rc::Rc,
-    marker::PhantomData
+    marker::PhantomData,
+    any::Any
 };
+
+use enum_as_inner::EnumAsInner;
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum DataCategory {
@@ -81,6 +84,100 @@ pub enum DataType {
     RcStr,
     String,
     Unknown
+}
+
+#[derive(EnumAsInner)]
+pub enum DataTypeValue {
+    Bool(bool),
+    U8(u8),
+    U16(u16),
+    U32(u32),
+    U64(u64),
+    U128(u128),
+    USize(usize),
+    I8(i8),
+    I16(i16),
+    I32(i32),
+    I64(i64),
+    I128(i128),
+    ISize(isize),
+    F32(f32),
+    F64(f64),
+    RcStr(Rc<str>),
+    String(String),
+    Unknown(Rc<dyn Any>)
+}
+
+impl From<bool> for DataTypeValue { 
+    fn from(v: bool) -> DataTypeValue { DataTypeValue::Bool(v) } 
+}
+
+impl From<u8> for DataTypeValue { 
+    fn from(v: u8) -> DataTypeValue { DataTypeValue::U8(v) } 
+}
+
+impl From<u16> for DataTypeValue { 
+    fn from(v: u16) -> DataTypeValue { DataTypeValue::U16(v) } 
+}
+
+impl From<u32> for DataTypeValue { 
+    fn from(v: u32) -> DataTypeValue { DataTypeValue::U32(v) } 
+}
+
+impl From<u64> for DataTypeValue { 
+    fn from(v: u64) -> DataTypeValue { DataTypeValue::U64(v) } 
+}
+
+impl From<u128> for DataTypeValue { 
+    fn from(v: u128) -> DataTypeValue { DataTypeValue::U128(v) } 
+}
+
+impl From<usize> for DataTypeValue { 
+    fn from(v: usize) -> DataTypeValue { DataTypeValue::USize(v) } 
+}
+
+impl From<i8> for DataTypeValue { 
+    fn from(v: i8) -> DataTypeValue { DataTypeValue::I8(v) } 
+}
+
+impl From<i16> for DataTypeValue { 
+    fn from(v: i16) -> DataTypeValue { DataTypeValue::I16(v) } 
+}
+
+impl From<i32> for DataTypeValue { 
+    fn from(v: i32) -> DataTypeValue { DataTypeValue::I32(v) } 
+}
+
+impl From<i64> for DataTypeValue { 
+    fn from(v: i64) -> DataTypeValue { DataTypeValue::I64(v) } 
+}
+
+impl From<i128> for DataTypeValue { 
+    fn from(v: i128) -> DataTypeValue { DataTypeValue::I128(v) } 
+}
+
+impl From<isize> for DataTypeValue { 
+    fn from(v: isize) -> DataTypeValue { DataTypeValue::ISize(v) } 
+}
+
+impl From<f32> for DataTypeValue { 
+    fn from(v: f32) -> DataTypeValue { DataTypeValue::F32(v) } 
+}
+
+impl From<f64> for DataTypeValue { 
+    fn from(v: f64) -> DataTypeValue { DataTypeValue::F64(v) } 
+}
+
+impl From<Rc<str>> for DataTypeValue { 
+    fn from(v: Rc<str>) -> DataTypeValue { DataTypeValue::RcStr(v) } 
+}
+
+impl From<String> for DataTypeValue { 
+    fn from(v: String) -> DataTypeValue { DataTypeValue::String(v) } 
+}
+
+impl From<Rc<dyn Any>> for DataTypeValue { 
+    fn from(v: Rc<dyn Any>) -> DataTypeValue { DataTypeValue::Unknown(v) } 
 }
 
 pub auto trait UnknownDataTypeMarker {}
