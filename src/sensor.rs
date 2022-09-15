@@ -14,7 +14,7 @@ use num_traits::ToPrimitive;
 use dyn_clone::DynClone;
 
 use crate::{
-    data::{ DataCategory, DataType, DataDeductor, UnknownDataTypeMarker },
+    data::{ DataCategory, DataType, DataTypeValue, DataDeductor, UnknownDataTypeMarker },
     neuron::{ Neuron, NeuronID }
 };
 
@@ -35,7 +35,7 @@ pub trait SensorData: AnyCast + Display + DynClone + 'static {
 
 dyn_clone::clone_trait_object!(SensorData);
 
-macro_rules! impl_distance_numeric {
+macro_rules! impl_sensor_data_numeric {
     ( $($t:ty),* ) => {
         $( impl SensorData for $t {
             fn equals(&self, rhs: &dyn SensorData) -> bool {
@@ -59,7 +59,7 @@ macro_rules! impl_distance_numeric {
     }
 }
 
-macro_rules! impl_distance_categoric {
+macro_rules! impl_sensor_data_categoric {
     ( $($t:ty),* ) => {
         $( impl SensorData for $t {
             fn equals(&self, rhs: &dyn SensorData) -> bool {
@@ -77,14 +77,28 @@ macro_rules! impl_distance_categoric {
     }
 }
 
-impl_distance_numeric! { 
+impl_sensor_data_numeric! { 
     i8, i16, i32, i64, i128, isize,
     u8, u16, u32, u64, u128, usize,
     f32, f64
 }
 
-impl_distance_categoric! {
+impl_sensor_data_categoric! {
     String, Rc<str>, bool
+}
+
+impl SensorData for DataTypeValue {
+    fn equals(&self, rhs: &dyn SensorData) -> bool {
+        rhs.any().downcast_ref::<DataTypeValue>().map(|rhs| rhs == self).unwrap_or(false)
+    }
+    
+    fn partial_compare(&self, rhs: &dyn SensorData) -> Option<Ordering> {
+        self.partial_cmp(rhs.any().downcast_ref::<DataTypeValue>().unwrap())
+    }
+
+    fn distance(&self, rhs: &dyn SensorData) -> f64 {
+        if *self == *rhs.any().downcast_ref::<DataTypeValue>().unwrap() { 0.0 } else { 1.0 }
+    }
 }
 
 impl Eq for dyn SensorData {}

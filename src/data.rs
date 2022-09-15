@@ -1,7 +1,8 @@
 use std::{
     rc::Rc,
     marker::PhantomData,
-    any::Any
+    any::Any,
+    fmt::{ Display, Formatter, Result as FmtResult }
 };
 
 use enum_as_inner::EnumAsInner;
@@ -86,7 +87,7 @@ pub enum DataType {
     Unknown
 }
 
-#[derive(EnumAsInner)]
+#[derive(EnumAsInner, Clone, Debug, PartialEq, PartialOrd)]
 pub enum DataTypeValue {
     Bool(bool),
     U8(u8),
@@ -105,7 +106,13 @@ pub enum DataTypeValue {
     F64(f64),
     RcStr(Rc<str>),
     String(String),
-    Unknown(Rc<dyn Any>)
+    Unknown
+}
+
+impl Display for DataTypeValue {
+    fn fmt(&self, f: &mut Formatter) -> FmtResult {
+        write!(f, "{self}")
+    }
 }
 
 impl From<bool> for DataTypeValue { 
@@ -174,10 +181,6 @@ impl From<Rc<str>> for DataTypeValue {
 
 impl From<String> for DataTypeValue { 
     fn from(v: String) -> DataTypeValue { DataTypeValue::String(v) } 
-}
-
-impl From<Rc<dyn Any>> for DataTypeValue { 
-    fn from(v: Rc<dyn Any>) -> DataTypeValue { DataTypeValue::Unknown(v) } 
 }
 
 pub auto trait UnknownDataTypeMarker {}
