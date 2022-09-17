@@ -2,7 +2,21 @@ use std::fs::File;
 
 use polars::prelude::*;
 
-use crate::data::DataVec;
+pub enum DataVec {
+    BoolVec(Vec<bool>),
+    UInt8Vec(Vec<u8>),
+    UInt16Vec(Vec<u16>),
+    UInt32Vec(Vec<u32>),
+    UInt64Vec(Vec<u64>),
+    Int8Vec(Vec<i8>),
+    Int16Vec(Vec<i16>),
+    Int32Vec(Vec<i32>),
+    Int64Vec(Vec<i64>),
+    Float32Vec(Vec<f32>),
+    Float64Vec(Vec<f64>),
+    Utf8Vec(Vec<String>),
+    Unknown
+}
 
 pub fn csv_to_dataframe(filename: &str) -> Result<DataFrame> {
     let file = File::open(filename)?;
