@@ -44,6 +44,17 @@ pub trait Neuron {
     fn deactivate(&mut self, propagate_horizontal: bool, propagate_vertical: bool);
 }
 
+impl Display for dyn Neuron {
+    fn fmt(&self, f: &mut Formatter) -> FmtResult {
+        write!(
+            f, "[{}|c:{}|a:{}]",
+            self.id(), 
+            self.counter(), 
+            self.activation()
+        )
+    }
+}
+
 pub trait NeuronConnect {
     fn connect_to(
         &mut self, to: Rc<RefCell<dyn Neuron>>, kind: ConnectionKind
