@@ -2,7 +2,8 @@ use std::{
     rc::Rc, 
     cell::RefCell,
     hash::Hash,
-    collections::HashMap
+    collections::HashMap,
+    fmt::{ Display, Formatter, Result as FmtResult }
 };
 
 use crate::connection::{ Connection, ConnectionKind };
@@ -16,6 +17,12 @@ pub struct NeuronID {
 impl NeuronID {
     pub fn new(id: &str, parent_id: &str) -> NeuronID {
         NeuronID { id: Rc::from(id), parent_id: Rc::from(parent_id) }
+    }
+}
+
+impl Display for NeuronID {
+    fn fmt(&self, f: &mut Formatter) -> FmtResult {
+        write!(f, "{}_{}", self.parent_id, self.id)
     }
 }
 
