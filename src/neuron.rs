@@ -10,13 +10,13 @@ use crate::connection::{ Connection, ConnectionKind };
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct NeuronID {
-    pub id: usize,
+    pub id: Rc<str>,
     pub parent_id: Rc<str>
 }
 
 impl NeuronID {
-    pub fn new(id: usize, parent_id: &str) -> NeuronID {
-        NeuronID { id, parent_id: Rc::from(parent_id) }
+    pub fn new(id: &str, parent_id: &str) -> NeuronID {
+        NeuronID { id: Rc::from(id), parent_id: Rc::from(parent_id) }
     }
 }
 
