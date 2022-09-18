@@ -166,6 +166,34 @@ impl From<String> for DataTypeValue {
     fn from(v: String) -> DataTypeValue { DataTypeValue::String(v) } 
 }
 
+pub struct DataTypeValueStr<'a>(pub &'a str);
+
+impl<'a> DataTypeValueStr<'a> {
+    pub fn data_type_value(&self, data_type: DataType) -> Option<DataTypeValue> {
+        let result = match data_type {
+            DataType::Bool => DataTypeValue::Bool(self.0.parse().ok()?),
+            DataType::U8 => DataTypeValue::U8(self.0.parse().ok()?),
+            DataType::U16 => DataTypeValue::U16(self.0.parse().ok()?),
+            DataType::U32 => DataTypeValue::U32(self.0.parse().ok()?),
+            DataType::U64 => DataTypeValue::U64(self.0.parse().ok()?),
+            DataType::U128 => DataTypeValue::U128(self.0.parse().ok()?),
+            DataType::USize => DataTypeValue::USize(self.0.parse().ok()?),
+            DataType::I8 => DataTypeValue::I8(self.0.parse().ok()?),
+            DataType::I16 => DataTypeValue::I16(self.0.parse().ok()?),
+            DataType::I32 => DataTypeValue::I32(self.0.parse().ok()?),
+            DataType::I64 => DataTypeValue::I64(self.0.parse().ok()?),
+            DataType::I128 => DataTypeValue::I128(self.0.parse().ok()?),
+            DataType::ISize => DataTypeValue::ISize(self.0.parse().ok()?),
+            DataType::F32 => DataTypeValue::F32(self.0.parse().ok()?),
+            DataType::F64 => DataTypeValue::F64(self.0.parse().ok()?),
+            DataType::RcStr => DataTypeValue::RcStr(self.0.into()),
+            DataType::String => DataTypeValue::String(self.0.parse().ok()?),
+            DataType::Unknown => return None
+        };
+        Some(result)
+    }
+}
+
 pub auto trait UnknownDataTypeMarker {}
 
 impl !UnknownDataTypeMarker for bool {}
