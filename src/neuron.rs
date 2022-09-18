@@ -6,7 +6,7 @@ use std::{
     fmt::{ Display, Formatter, Result as FmtResult }
 };
 
-use crate::connection::{ Connection, ConnectionKind };
+use crate::{connection::{ Connection, ConnectionKind }, data::DataTypeValue};
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct NeuronID {
@@ -36,6 +36,8 @@ pub trait Neuron {
     fn counter(&self) -> usize;
 
     fn explain(&self) -> HashMap<NeuronID, Rc<RefCell<dyn Neuron>>>;
+
+    fn explain_one(&self, parent: Rc<str>) -> Option<DataTypeValue>;
 
     fn activate(
         &mut self, signal: f32, propagate_horizontal: bool, propagate_vertical: bool
