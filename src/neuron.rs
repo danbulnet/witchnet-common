@@ -6,7 +6,10 @@ use std::{
     fmt::{ Display, Formatter, Result as FmtResult }
 };
 
-use crate::{connection::{ Connection, ConnectionKind }, data::DataTypeValue};
+use crate::{
+    connection::{ Connection, ConnectionKind }, 
+    data::{ DataTypeValue, DataType }
+};
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct NeuronID {
@@ -32,6 +35,8 @@ pub trait Neuron {
     fn activation(&self) -> f32;
 
     fn is_sensor(&self) -> bool;
+
+    fn data_type(&self) -> DataType;
 
     fn counter(&self) -> usize;
 
