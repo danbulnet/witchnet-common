@@ -6,6 +6,12 @@ use std::{
 
 use enum_as_inner::EnumAsInner;
 
+use num_traits::ToPrimitive;
+
+use crate::{
+    distances::Distance
+};
+
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum DataCategory {
     Numerical,
@@ -95,6 +101,90 @@ pub enum DataTypeValue {
 impl Display for DataTypeValue {
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
         write!(f, "{self}")
+    }
+}
+
+impl Distance for DataTypeValue {
+    fn distance(&self, v: &DataTypeValue) -> f64 {
+        fn numeric_distance<T: ToPrimitive>(lhs: &T, rhs: &T) -> f64 {
+            unsafe { 
+                let lhsv = ToPrimitive::to_f64(lhs).unwrap_unchecked();
+                let rhsv = ToPrimitive::to_f64(rhs).unwrap_unchecked();
+                (lhsv - rhsv).abs()
+            }
+        }
+
+        match self {
+            DataTypeValue::Bool(lhs) => {
+                let rhs = match v.as_bool() { Some(v) => v, None => return f64::NAN };
+                if *lhs == *rhs { 0.0 } else { 1.0 }
+            }
+            DataTypeValue::U8(lhs) => {
+                let rhs = match v.as_u8() { Some(v) => v, None => return f64::NAN };
+                numeric_distance(lhs, rhs)
+            }
+            DataTypeValue::U16(lhs) => {
+                let rhs = match v.as_u16() { Some(v) => v, None => return f64::NAN };
+                numeric_distance(lhs, rhs)
+            }
+            DataTypeValue::U32(lhs) => {
+                let rhs = match v.as_u32() { Some(v) => v, None => return f64::NAN };
+                numeric_distance(lhs, rhs)
+            }
+            DataTypeValue::U64(lhs) => {
+                let rhs = match v.as_u64() { Some(v) => v, None => return f64::NAN };
+                numeric_distance(lhs, rhs)
+            }
+            DataTypeValue::U128(lhs) => {
+                let rhs = match v.as_u128() { Some(v) => v, None => return f64::NAN };
+                numeric_distance(lhs, rhs)
+            }
+            DataTypeValue::USize(lhs) => {
+                let rhs = match v.as_u_size() { Some(v) => v, None => return f64::NAN };
+                numeric_distance(lhs, rhs)
+            }
+            DataTypeValue::I8(lhs) => {
+                let rhs = match v.as_i8() { Some(v) => v, None => return f64::NAN };
+                numeric_distance(lhs, rhs)
+            }
+            DataTypeValue::I16(lhs) => {
+                let rhs = match v.as_i16() { Some(v) => v, None => return f64::NAN };
+                numeric_distance(lhs, rhs)
+            }
+            DataTypeValue::I32(lhs) => {
+                let rhs = match v.as_i32() { Some(v) => v, None => return f64::NAN };
+                numeric_distance(lhs, rhs)
+            }
+            DataTypeValue::I64(lhs) => {
+                let rhs = match v.as_i64() { Some(v) => v, None => return f64::NAN };
+                numeric_distance(lhs, rhs)
+            }
+            DataTypeValue::I128(lhs) => {
+                let rhs = match v.as_i128() { Some(v) => v, None => return f64::NAN };
+                numeric_distance(lhs, rhs)
+            }
+            DataTypeValue::ISize(lhs) => {
+                let rhs = match v.as_i_size() { Some(v) => v, None => return f64::NAN };
+                numeric_distance(lhs, rhs)
+            }
+            DataTypeValue::F32(lhs) => {
+                let rhs = match v.as_f32() { Some(v) => v, None => return f64::NAN };
+                numeric_distance(lhs, rhs)
+            }
+            DataTypeValue::F64(lhs) => {
+                let rhs = match v.as_f64() { Some(v) => v, None => return f64::NAN };
+                numeric_distance(lhs, rhs)
+            }
+            DataTypeValue::RcStr(lhs) => {
+                let rhs = match v.as_rc_str() { Some(v) => v, None => return f64::NAN };
+                if *lhs == *rhs { 0.0 } else { 1.0 }
+            }
+            DataTypeValue::String(lhs) => {
+                let rhs = match v.as_string() { Some(v) => v, None => return f64::NAN };
+                if *lhs == *rhs { 0.0 } else { 1.0 }
+            }
+            DataTypeValue::Unknown => f64::NAN
+        }
     }
 }
 
