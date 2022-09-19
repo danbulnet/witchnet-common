@@ -55,6 +55,7 @@ impl_numerical! {
 
 impl_categorical! { String, Rc<str>, bool }
 
+#[derive(Debug)]
 pub enum DataType {
     Bool,
     U8,
@@ -96,6 +97,12 @@ pub enum DataTypeValue {
     RcStr(Rc<str>),
     String(String),
     Unknown
+}
+
+impl Display for DataType {
+    fn fmt(&self, f: &mut Formatter) -> FmtResult {
+        write!(f, "{self}")
+    }
 }
 
 impl Display for DataTypeValue {
