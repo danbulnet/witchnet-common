@@ -166,6 +166,74 @@ impl From<String> for DataTypeValue {
     fn from(v: String) -> DataTypeValue { DataTypeValue::String(v) } 
 }
 
+impl From<DataTypeValue> for Option<bool> { 
+    fn from(v: DataTypeValue) -> Option<bool> { v.into_bool().ok() } 
+}
+
+impl From<DataTypeValue> for Option<u8> { 
+    fn from(v: DataTypeValue) -> Option<u8> { v.into_u8().ok() } 
+}
+
+impl From<DataTypeValue> for Option<u16> { 
+    fn from(v: DataTypeValue) -> Option<u16> { v.into_u16().ok() } 
+}
+
+impl From<DataTypeValue> for Option<u32> { 
+    fn from(v: DataTypeValue) -> Option<u32> { v.into_u32().ok() } 
+}
+
+impl From<DataTypeValue> for Option<u64> { 
+    fn from(v: DataTypeValue) -> Option<u64> { v.into_u64().ok() } 
+}
+
+impl From<DataTypeValue> for Option<u128> { 
+    fn from(v: DataTypeValue) -> Option<u128> { v.into_u128().ok() } 
+}
+
+impl From<DataTypeValue> for Option<usize> { 
+    fn from(v: DataTypeValue) -> Option<usize> { v.into_u_size().ok() } 
+}
+
+impl From<DataTypeValue> for Option<i8> { 
+    fn from(v: DataTypeValue) -> Option<i8> { v.into_i8().ok() } 
+}
+
+impl From<DataTypeValue> for Option<i16> { 
+    fn from(v: DataTypeValue) -> Option<i16> { v.into_i16().ok() } 
+}
+
+impl From<DataTypeValue> for Option<i32> { 
+    fn from(v: DataTypeValue) -> Option<i32> { v.into_i32().ok() } 
+}
+
+impl From<DataTypeValue> for Option<i64> { 
+    fn from(v: DataTypeValue) -> Option<i64> { v.into_i64().ok() } 
+}
+
+impl From<DataTypeValue> for Option<i128> { 
+    fn from(v: DataTypeValue) -> Option<i128> { v.into_i128().ok() } 
+}
+
+impl From<DataTypeValue> for Option<isize> { 
+    fn from(v: DataTypeValue) -> Option<isize> { v.into_i_size().ok() } 
+}
+
+impl From<DataTypeValue> for Option<f32> { 
+    fn from(v: DataTypeValue) -> Option<f32> { v.into_f32().ok() } 
+}
+
+impl From<DataTypeValue> for Option<f64> { 
+    fn from(v: DataTypeValue) -> Option<f64> { v.into_f64().ok() } 
+}
+
+impl From<DataTypeValue> for Option<Rc<str>> { 
+    fn from(v: DataTypeValue) -> Option<Rc<str>> { v.into_rc_str().ok() } 
+}
+
+impl From<DataTypeValue> for Option<String> { 
+    fn from(v: DataTypeValue) -> Option<String> { v.into_string().ok() } 
+}
+
 pub struct DataTypeValueStr<'a>(pub &'a str);
 
 impl<'a> DataTypeValueStr<'a> {
