@@ -101,13 +101,13 @@ pub enum DataTypeValue {
 
 impl Display for DataType {
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
-        write!(f, "{self}")
+        write!(f, "{:?}", self)
     }
 }
 
 impl Display for DataTypeValue {
     fn fmt(&self, f: &mut Formatter) -> FmtResult {
-        write!(f, "{self}")
+        write!(f, "{:?}", self)
     }
 }
 
